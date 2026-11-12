@@ -373,9 +373,6 @@ An **Attribute** describes the properties or characteristics of an entity.
 | Multivalued | Double Oval | Phone |
 | Unique / Key | Underlined Oval | Student_ID |
 
-## Remember for Exams
-- Simple → Cannot be divided.
-- Composite → Can be divided.
-- Derived → Calculated.
-- Multivalued → Multiple values for one entity.
-- Unique → Uniquely identifies an entity.
+<img width="706" height="423" alt="image" src="https://github.com/user-attachments/assets/8e9e0e02-2b92-4356-9f5b-89b710531224" />
+
+
