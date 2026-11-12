@@ -329,3 +329,53 @@ A Weak Entity cannot be uniquely identified by its own attributes and depends on
 **Remember:**
 - Strong Entity = Independent Entity.
 - Weak Entity = Dependent Entity.
+<img width="815" height="655" alt="image" src="https://github.com/user-attachments/assets/14f61ee2-5576-402d-8098-709acf644597" />
+# Types of Attributes in ER Model
+
+An **Attribute** describes the properties or characteristics of an entity.
+
+## 1. Simple Attribute
+- Cannot be divided into smaller attributes.
+- Symbol: Single Oval.
+- Example: Age, Salary, Gender.
+
+## 2. Composite Attribute
+- Can be divided into smaller attributes.
+- Symbol: Connected Ovals.
+- Example: Name → First Name, Middle Name, Last Name.
+
+## 3. Derived Attribute
+- Value is calculated from another attribute.
+- Symbol: Dashed Oval.
+- Example: Age (calculated from DOB).
+
+## 4. Multivalued Attribute
+- Can contain multiple values for a single entity.
+- Symbol: Double Oval.
+- Example: Phone Number, Email, Skills.
+- Example: One student can have multiple phone numbers.
+
+## 5. Unique / Key Attribute
+- Uniquely identifies each entity.
+- Symbol: Underlined Attribute Name.
+- Example: Student_ID, Employee_ID, NID.
+
+  <img width="579" height="599" alt="image" src="https://github.com/user-attachments/assets/24ad083f-1b92-4f54-b4e7-92b457d23df3" />
+
+
+## Quick Revision
+
+| Attribute | Symbol | Example |
+|---|---|---|
+| Simple | Single Oval | Age |
+| Composite | Connected Ovals | Name |
+| Derived | Dashed Oval | Age from DOB |
+| Multivalued | Double Oval | Phone |
+| Unique / Key | Underlined Oval | Student_ID |
+
+## Remember for Exams
+- Simple → Cannot be divided.
+- Composite → Can be divided.
+- Derived → Calculated.
+- Multivalued → Multiple values for one entity.
+- Unique → Uniquely identifies an entity.
