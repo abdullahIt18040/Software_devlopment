@@ -378,6 +378,7 @@ An **Attribute** describes the properties or characteristics of an entity.
 <img width="553" height="435" alt="image" src="https://github.com/user-attachments/assets/fd7beb0d-dbaa-4228-8a4b-070a737bd9ec" />
 <img width="657" height="422" alt="image" src="https://github.com/user-attachments/assets/657c83be-74ed-4391-92fb-97ba5d3b6815" />
 <img width="872" height="500" alt="image" src="https://github.com/user-attachments/assets/7a4be55e-2f3a-4a2d-80b6-4f32a9730896" />
+Many-to-Many (M:N) relationship implement করার জন্য একটি third entity তৈরি করা হয়। একে Associative Entity, Junction Table অথবা Bridge Table বলে।
 <img width="737" height="343" alt="image" src="https://github.com/user-attachments/assets/06c6a618-ed9a-423d-a9f1-7b628dc1bf2f" />
 
 
