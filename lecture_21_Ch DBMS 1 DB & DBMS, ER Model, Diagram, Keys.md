@@ -484,9 +484,8 @@ Many-to-Many (M:N) relationship implement করার জন্য একটি
 - Alternate Key = Candidate Key not selected as PK
 
 <img width="818" height="429" alt="image" src="https://github.com/user-attachments/assets/f87717a1-0f6f-4955-b597-b3d97a8106e6" />
-HJGH
-## ANSWE 4 . ROLL NUMBER IS PRIMARY KEY BECAUSE . IT IS UNIQUE AND NOT NULL, BUT EMAIL CAN NULL.SO EMAIL IS NOT PRIMARY KEY
-# DBMS Index – Short Notes
+
+# ANSWE 4 . ROLL NUMBER IS PRIMARY KEY BECAUSE . IT IS UNIQUE AND NOT NULL, BUT EMAIL CAN NULL.SO EMAIL IS NOT PRIMARY KEY
 
 ## 1. Index
 - An Index is a data structure used to retrieve data quickly from a database table.
