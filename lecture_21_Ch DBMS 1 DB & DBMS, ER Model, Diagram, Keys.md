@@ -385,7 +385,160 @@ Many-to-Many (M:N) relationship implement করার জন্য একটি
 
 <img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/e757e5de-16c6-43e3-8499-739248bac5d6" />
 <img width="791" height="171" alt="image" src="https://github.com/user-attachments/assets/eedf5a5d-3f3f-4da6-8448-9630f3bcfbdc" />
+<img width="996" height="639" alt="image" src="https://github.com/user-attachments/assets/4c5c2fb4-92bb-4d90-a9c5-961390c7d422" />
 
+# DBMS Keys – Complete Notes
+<img width="468" height="207" alt="image" src="https://github.com/user-attachments/assets/d9a16264-05c5-4044-aeb5-7dd099461428" />
+<img width="478" height="304" alt="image" src="https://github.com/user-attachments/assets/9ddb6bd2-5b26-48fc-a512-5e170f2bc7b3" />
 
+## 1. Super Key
+- A Super Key is a set of one or more attributes that uniquely identifies a record.
+- It may contain extra (unnecessary) attributes.
+- Example: `{Student_ID}`, `{Student_ID, Name}`.
 
+## 2. Candidate Key
+
+- A Candidate Key is a minimal Super Key.
+- It uniquely identifies each record.
+- It contains no unnecessary attributes.
+- A table can have multiple Candidate Keys.
+
+## 3. Primary Key (PK)
+- A Primary Key is a Candidate Key selected to uniquely identify each record.
+- ## Must be unique.
+- ## Cannot contain NULL values.
+- Only one Primary Key constraint per table.
+
+## 4. Alternate Key
+- Candidate Keys that are not selected as the Primary Key are called Alternate Keys.
+- Example: If `Student_ID` is PK and `Email` is another Candidate Key, then `Email` is an Alternate Key.
+
+## 5. Foreign Key (FK)
+- A Foreign Key is an attribute that references a Primary Key or a suitable UNIQUE key in another table.
+- Establishes relationships between tables.
+- Can contain duplicate values.
+- Can contain NULL values unless restricted.
+
+## 6. Composite Key
+- A Composite Key consists of two or more attributes used together to uniquely identify a record.
+- Example: `(Student_ID, Course_ID)`.
+
+## 7. Unique Key
+- Ensures that values in a column or combination of columns are unique.
+- A table can have multiple UNIQUE constraints.
+- NULL handling depends on the DBMS.
+
+## 8. Simple Key
+- A Simple Key consists of only one attribute.
+- Example: `Student_ID`.
+
+## 9. Natural Key
+- A Natural Key has real-world meaning.
+- Examples: Email, Passport_Number, National_ID.
+
+## 10. Surrogate Key
+- An artificially generated key with no business meaning.
+- Examples: Auto-generated ID, Sequence ID.
+
+## 11. Secondary Key
+- An attribute used for searching or retrieving records.
+- It does not necessarily uniquely identify a record.
+- Example: Department_ID, City.
+
+---
+
+## Key Differences
+
+| Key | Purpose |
+|---|---|
+| Super Key | Uniquely identifies records |
+| Candidate Key | Minimal Super Key |
+| Primary Key | Selected Candidate Key |
+| Alternate Key | Remaining Candidate Keys |
+| Foreign Key | Establishes relationships |
+| Composite Key | Uses multiple attributes |
+| Unique Key | Prevents duplicate values |
+| Simple Key | Uses one attribute |
+| Natural Key | Real-world meaningful key |
+| Surrogate Key | Artificially generated key |
+| Secondary Key | Helps search records |
+
+## Relationship Between Keys
+
+```text
+       Super Key
+           |
+           v
+     Candidate Key
+           |
+       Selection
+       /       \
+      v         v
+ Primary Key  Alternate Key
+```
+**Remember:**
+- PK = Unique + NOT NULL
+- FK = Relationship between tables
+- Candidate Key = Minimal Super Key
+- Composite Key = Multiple attributes
+- Alternate Key = Candidate Key not selected as PK
+
+<img width="818" height="429" alt="image" src="https://github.com/user-attachments/assets/f87717a1-0f6f-4955-b597-b3d97a8106e6" />
+## ROLL NUMBER IS PRIMARY KEY BECAUSE . IT IS UNIQUE AND NOT NULL, BUT EMAIL CAN NULL.SO EMAIL IS NOT PRIMARY KEY
+# DBMS Index – Short Notes
+
+## 1. Index
+- An Index is a data structure used to retrieve data quickly from a database table.
+- Similar to an index in a book.
+- Improves SELECT query performance.
+
+## 2. Types of Index
+
+1. **Primary Index:** Created based on the primary key in traditional ordered-file indexing.
+2. **Secondary Index:** Created on a non-ordering attribute.
+3. **Clustered Index:** Determines the physical order of records.
+4. **Non-Clustered Index:** Stores index entries separately from table data.
+5. **Unique Index:** Prevents duplicate indexed values.
+6. **Composite Index:** Created using two or more columns.
+
+## 3. Advantages
+- Faster data searching.
+- Improves SELECT performance.
+- Helps sorting and filtering.
+
+## 4. Disadvantages
+- Requires extra storage.
+- Slows down INSERT, UPDATE and DELETE operations due to index maintenance.
+
+## 5. SQL Example
+
+```sql
+-- Create Index
+CREATE INDEX idx_student_name
+ON Student(Name);
+
+-- Create Unique Index
+CREATE UNIQUE INDEX idx_student_email
+ON Student(Email);
+
+-- Create Composite Index
+CREATE INDEX idx_student_dept
+ON Student(Dept_ID, Name);
+
+-- Drop Index (syntax varies by DBMS)
+DROP INDEX idx_student_name;
+```
+
+## 6. Important Exam Notes
+- Index improves data retrieval speed.
+- Index requires additional storage.
+- Too many indexes can slow down write operations.
+- Primary Key usually creates an index automatically.
+- Composite Index uses multiple columns.
+
+**Remember:**
+
+`Index = Faster Searching + Extra Storage`
+
+`More Indexes = Faster Reads + Potentially Slower Writes`
 
