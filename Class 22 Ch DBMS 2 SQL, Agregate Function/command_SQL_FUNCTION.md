@@ -28,7 +28,7 @@ CREATE TABLE Student (
 );
 
 ALTER TABLE Student ADD email VARCHAR(100);
-
+Alter table student Drop column eamil varchar(200); 
 TRUNCATE TABLE Student;
 
 DROP TABLE Student;
