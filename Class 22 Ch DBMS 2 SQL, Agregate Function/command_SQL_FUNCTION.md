@@ -1315,4 +1315,274 @@ SELF JOIN is commonly used for:
 - FULL OUTER JOIN = All records from Both tables
 - CROSS JOIN = Cartesian Product
 - SELF JOIN = Same table joined with itself
+# SQL Query Execution Order
+
+## 1. What is SQL Query Execution Order?
+
+SQL Query Execution Order হলো একটি SQL query-এর বিভিন্ন clause database engine কোন logical order-এ process করে তার নিয়ম।
+
+**Important:** SQL query আমরা যেভাবে লিখি, database engine সাধারণত logical processing-এর ক্ষেত্রে সেভাবে execute করে না।
+<img width="874" height="462" alt="image" src="https://github.com/user-attachments/assets/512e1abe-64a5-483e-b51b-f12e6c44b13e" />
+
+## 2. SQL Logical Execution Order
+
+| Order | Clause | Description |
+|---|---|---|
+| 1 | FROM | কোন table থেকে data আসবে |
+| 2 | JOIN / ON | একাধিক table-এর data combine এবং matching condition |
+| 3 | WHERE | Individual rows filter করে |
+| 4 | GROUP BY | একই value অনুযায়ী rows group করে |
+| 5 | HAVING | Group-level filtering করে |
+| 6 | SELECT | কোন column বা expression return করবে |
+| 7 | DISTINCT | Duplicate rows remove করে |
+| 8 | ORDER BY | Result sort করে |
+| 9 | LIMIT / OFFSET | Result-এর row সংখ্যা সীমিত করে এবং starting position নির্ধারণ করে |
+
+**Execution Flow:**
+
+```text
+FROM
+  |
+JOIN / ON
+  |
+WHERE
+  |
+GROUP BY
+  |
+HAVING
+  |
+SELECT
+  |
+DISTINCT
+  |
+ORDER BY
+  |
+LIMIT / OFFSET
+```
+
+## 3. Example SQL Query
+
+```sql
+SELECT department_id, COUNT(*) AS total_employee
+FROM employees
+WHERE salary > 20000
+GROUP BY department_id
+HAVING COUNT(*) > 2
+ORDER BY total_employee DESC
+LIMIT 5;
+```
+
+### Execution Explanation (Bangla)
+
+**Step 1: FROM**
+
+প্রথমে employees table থেকে data নেয়।
+
+**Step 2: WHERE**
+
+যেসব employee-এর salary 20000-এর বেশি, শুধু তাদের রাখে।
+
+**Step 3: GROUP BY**
+
+`department_id` অনুযায়ী employee-দের group তৈরি করে।
+
+**Step 4: HAVING**
+
+যেসব department-এ employee সংখ্যা 2-এর বেশি, শুধু সেগুলো রাখে।
+
+**Step 5: SELECT**
+
+`department_id` এবং employee count select করে।
+
+**Step 6: ORDER BY**
+
+Employee count descending order-এ সাজায়।
+
+**Step 7: LIMIT**
+
+প্রথম 5টি result দেখায়।
+
+## 4. SQL Writing Order vs Execution Order
+
+| Writing Order | Execution Order |
+|---|---|
+| SELECT | 6 |
+| FROM | 1 |
+| JOIN / ON | 2 |
+| WHERE | 3 |
+| GROUP BY | 4 |
+| HAVING | 5 |
+| DISTINCT | 7 |
+| ORDER BY | 8 |
+| LIMIT / OFFSET | 9 |
+
+## 5. WHERE vs HAVING
+
+| WHERE | HAVING |
+|---|---|
+| Individual rows filter করে | Groups filter করে |
+| GROUP BY-এর আগে process হয় | GROUP BY-এর পরে process হয় |
+| সাধারণত aggregate function সরাসরি ব্যবহার করা যায় না | Aggregate function ব্যবহার করা যায় |
+| Row-level filtering | Group-level filtering |
+
+**Example:**
+
+```sql
+-- WHERE: Filter individual rows
+SELECT *
+FROM employees
+WHERE salary > 20000;
+
+-- HAVING: Filter groups
+SELECT department_id, COUNT(*) AS total_employee
+FROM employees
+GROUP BY department_id
+HAVING COUNT(*) > 2;
+```
+
+## 6. Important SQL Concepts
+
+### 6.1 SELECT Alias
+
+SELECT-এর alias সাধারণত ORDER BY-তে ব্যবহার করা যায়, কিন্তু একই query level-এর WHERE clause-এ ব্যবহার করা যায় না।
+
+```sql
+-- Correct
+SELECT salary * 12 AS annual_salary
+FROM employees
+ORDER BY annual_salary DESC;
+
+-- Incorrect
+SELECT salary * 12 AS annual_salary
+FROM employees
+WHERE annual_salary > 200000;
+```
+
+**Reason:** Logical processing order অনুযায়ী WHERE আগে এবং SELECT পরে process হয়।
+
+### 6.2 Aggregate Functions
+
+Common aggregate functions:
+
+- `COUNT()` – Counts rows
+- `SUM()` – Calculates total
+- `AVG()` – Calculates average
+- `MAX()` – Finds maximum value
+- `MIN()` – Finds minimum value
+
+### 6.3 DISTINCT
+
+`DISTINCT` duplicate result rows remove করে।
+
+```sql
+SELECT DISTINCT department_id
+FROM employees;
+```
+
+### 6.4 ORDER BY
+
+`ORDER BY` result sort করে।
+
+```sql
+-- Ascending order
+SELECT *
+FROM employees
+ORDER BY salary ASC;
+
+-- Descending order
+SELECT *
+FROM employees
+ORDER BY salary DESC;
+```
+
+## 7. Job Exam Quick Revision
+
+| Question | Answer |
+|---|---|
+| Which clause executes first? | FROM |
+| Which clause filters rows? | WHERE |
+| Which clause groups rows? | GROUP BY |
+| Which clause filters groups? | HAVING |
+| Which clause selects columns? | SELECT |
+| Which clause removes duplicates? | DISTINCT |
+| Which clause sorts records? | ORDER BY |
+| Which clause limits rows? | LIMIT |
+
+## 8. Practice MCQ
+
+**Q1. Which clause is processed first in a SELECT query?**
+
+- [ ] SELECT
+- [ ] WHERE
+- [x] FROM
+- [ ] ORDER BY
+
+**Answer:** FROM
+
+**Q2. Which clause filters records before GROUP BY?**
+
+- [ ] HAVING
+- [x] WHERE
+- [ ] ORDER BY
+- [ ] DISTINCT
+
+**Answer:** WHERE
+
+**Q3. Which clause filters grouped records?**
+
+- [ ] WHERE
+- [ ] FROM
+- [x] HAVING
+- [ ] LIMIT
+
+**Answer:** HAVING
+
+**Q4. Which clause is used to sort query results?**
+
+- [ ] GROUP BY
+- [x] ORDER BY
+- [ ] HAVING
+- [ ] WHERE
+
+**Answer:** ORDER BY
+
+**Q5. Which clause removes duplicate rows?**
+
+- [ ] GROUP BY
+- [ ] ORDER BY
+- [x] DISTINCT
+- [ ] WHERE
+
+**Answer:** DISTINCT
+
+---
+
+## 9. Final Remembering Note
+
+```sql
+FROM
+JOIN / ON
+WHERE
+GROUP BY
+HAVING
+SELECT
+DISTINCT
+ORDER BY
+LIMIT / OFFSET
+```
+
+**Easy Memory Tips:**
+
+- FROM → Data কোথা থেকে আসবে?
+- WHERE → কোন rows থাকবে?
+- GROUP BY → কীভাবে group হবে?
+- HAVING → কোন groups থাকবে?
+- SELECT → কী দেখাবে?
+- DISTINCT → Duplicate বাদ দেবে?
+- ORDER BY → কীভাবে সাজাবে?
+- LIMIT → কয়টি দেখাবে?
+
+**Important Note:** This is the general logical query processing order, not necessarily the database engine's physical execution order. The optimizer may execute operations differently for performance. Advanced SQL features such as window functions and set operators have additional processing rules.
+<img width="809" height="187" alt="image" src="https://github.com/user-attachments/assets/0517564b-fb87-42a3-9b4b-fddc2defa5cd" />
+<img width="832" height="460" alt="image" src="https://github.com/user-attachments/assets/b798b4c6-da5a-4476-87de-ff559788f2cf" />
 
