@@ -780,5 +780,539 @@ The table structure represents a part of the database schema.
 
 - Schema = Database Blueprint.
 - Instance = Actual data stored in the database at a particular time.
+# SQL EXISTS and NOT EXISTS
 
+SQL-এর `EXISTS` এবং `NOT EXISTS` হলো Subquery-এর সাথে ব্যবহৃত দুটি operator। এগুলো নির্দিষ্ট শর্ত অনুযায়ী অন্য একটি query-তে matching record আছে কি না, তা পরীক্ষা করে।
+
+## 1. EXISTS Operator
+
+`EXISTS` subquery কমপক্ষে একটি row return করলে `TRUE` return করে।
+
+**Example Tables**
+
+**employees**
+
+| id | name | department_id |
+|---|---|---|
+| 1 | Mamun | 10 |
+| 2 | Rahim | 20 |
+| 3 | Karim | 30 |
+
+**departments**
+
+| id | department_name |
+|---|---|
+| 10 | IT |
+| 20 | HR |
+
+**Query:**
+
+```sql
+SELECT *
+FROM employees e
+WHERE EXISTS (
+    SELECT 1
+    FROM departments d
+    WHERE d.id = e.department_id
+);
+```
+
+**Result:**
+
+| id | name | department_id |
+|---|---|---|
+| 1 | Mamun | 10 |
+| 2 | Rahim | 20 |
+
+**Explanation (Bangla):**
+
+- Mamun-এর department_id = 10, departments table-এ আছে।
+- Rahim-এর department_id = 20, departments table-এ আছে।
+- Karim-এর department_id = 30, departments table-এ নেই।
+
+তাই শুধু Mamun এবং Rahim return করবে।
+
+## 2. NOT EXISTS Operator
+
+`NOT EXISTS` subquery কোনো row return না করলে `TRUE` return করে।
+
+**Query:**
+
+```sql
+SELECT *
+FROM employees e
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM departments d
+    WHERE d.id = e.department_id
+);
+```
+
+**Result:**
+
+| id | name | department_id |
+|---|---|---|
+| 3 | Karim | 30 |
+
+**Explanation (Bangla):**
+
+Karim-এর department_id = 30, কিন্তু departments table-এ এই ID নেই। তাই শুধু Karim return করবে।
+
+## 3. EXISTS vs NOT EXISTS
+
+| EXISTS | NOT EXISTS |
+|---|---|
+| Matching row থাকলে TRUE | Matching row না থাকলে TRUE |
+| At least one row পাওয়া যায় | কোনো row পাওয়া যায় না |
+| Matching records return করে | Non-matching records return করে |
+
+## 4. Important Points
+
+- `EXISTS` শুধু পরীক্ষা করে subquery কোনো row return করছে কি না।
+- `SELECT 1` ব্যবহার করা হয় কারণ এখানে selected value নয়, row existence গুরুত্বপূর্ণ।
+- `EXISTS` এবং `NOT EXISTS` প্রায়ই Correlated Subquery-এর সাথে ব্যবহৃত হয়।
+- `NOT EXISTS`-এ `NOT IN`-এর মতো subquery-র NULL value-এর কারণে UNKNOWN সমস্যা হয় না।
+- Subquery-এর ফলাফলের মধ্যে NULL থাকলেও `NOT EXISTS` সঠিকভাবে কাজ করে।
+
+## 5. Job Exam Key Notes
+
+```sql
+-- EXISTS: Find employees having a valid department
+SELECT *
+FROM employees e
+WHERE EXISTS (
+    SELECT 1
+    FROM departments d
+    WHERE d.id = e.department_id
+);
+
+-- NOT EXISTS: Find employees without a valid department
+SELECT *
+FROM employees e
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM departments d
+    WHERE d.id = e.department_id
+);
+```
+
+**Remember:**
+
+- `EXISTS` = Matching record আছে কি না?
+- `NOT EXISTS` = Matching record নেই কি না?
+- `EXISTS` returns TRUE if at least one row exists.
+- `NOT EXISTS` returns TRUE if no row exists.
+
+## 6. Practice MCQ
+
+**Q1. EXISTS কখন TRUE return করে?**
+
+- [x] Subquery কোনো row return করলে
+- [ ] Subquery কোনো row return না করলে
+- [ ] শুধু NULL থাকলে
+- [ ] সবসময়
+
+**Answer:** At least one row পাওয়া গেলে EXISTS TRUE হয়।
+
+**Q2. NOT EXISTS কখন TRUE return করে?**
+
+- [ ] একটি matching row থাকলে
+- [x] কোনো row return না করলে
+- [ ] সব row NULL হলে
+- [ ] সবসময়
+
+**Answer:** Subquery কোনো row return না করলে NOT EXISTS TRUE হয়।
+
+**Q3. EXISTS-এর ক্ষেত্রে SELECT 1 কেন ব্যবহার করা হয়?**
+
+- [ ] ১ সংখ্যাটি count করার জন্য
+- [x] শুধু row existence পরীক্ষা করার জন্য
+- [ ] প্রথম row delete করার জন্য
+- [ ] NULL বাদ দেওয়ার জন্য
+
+**Answer:** EXISTS-এর ক্ষেত্রে selected value নয়, row পাওয়া যাচ্ছে কি না সেটি গুরুত্বপূর্ণ।
+
+---
+
+# SQL JOIN
+
+SQL-এর `JOIN` ব্যবহার করে দুই বা ততোধিক table-এর মধ্যে সম্পর্কযুক্ত column-এর ভিত্তিতে data একসাথে retrieve করা যায়।
+
+**Definition:** JOIN is used to retrieve related data from two or more tables based on a related column between them.
+
+## 1. Types of SQL JOIN
+
+SQL JOIN প্রধানত চার ধরনের:
+
+1. INNER JOIN
+2. LEFT JOIN (LEFT OUTER JOIN)
+3. RIGHT JOIN (RIGHT OUTER JOIN)
+4. FULL OUTER JOIN
+
+## 2. Example Tables
+
+**employees**
+
+| id | name | dept_id |
+|---|---|---|
+| 1 | Mamun | 10 |
+| 2 | Rahim | 20 |
+| 3 | Karim | 30 |
+| 4 | Hasan | NULL |
+
+**departments**
+
+| id | dept_name |
+|---|---|
+| 10 | IT |
+| 20 | HR |
+| 40 | Finance |
+
+## 3. INNER JOIN
+
+INNER JOIN returns only matching records from both tables.
+
+**Syntax:**
+
+```sql
+SELECT columns
+FROM table1
+INNER JOIN table2
+ON table1.column = table2.column;
+```
+
+**Example:**
+
+```sql
+SELECT e.id, e.name, d.dept_name
+FROM employees e
+INNER JOIN departments d
+ON e.dept_id = d.id;
+```
+
+**Result:**
+
+| id | name | dept_name |
+|---|---|---|
+| 1 | Mamun | IT |
+| 2 | Rahim | HR |
+
+**Explanation (Bangla):**
+
+শুধুমাত্র যেসব employee-এর `dept_id` এবং departments table-এর `id` match করে, তাদের দেখাবে।
+
+## 4. LEFT JOIN (LEFT OUTER JOIN)
+
+LEFT JOIN returns all records from the left table and matching records from the right table.
+
+No matching record হলে right table-এর column-এ `NULL` দেখাবে।
+
+**Example:**
+
+```sql
+SELECT e.id, e.name, d.dept_name
+FROM employees e
+LEFT JOIN departments d
+ON e.dept_id = d.id;
+```
+
+**Result:**
+
+| id | name | dept_name |
+|---|---|---|
+| 1 | Mamun | IT |
+| 2 | Rahim | HR |
+| 3 | Karim | NULL |
+| 4 | Hasan | NULL |
+
+**Explanation (Bangla):**
+
+Left table অর্থাৎ `employees`-এর সব records দেখাবে। Matching department না থাকলে department name `NULL` হবে।
+
+## 5. RIGHT JOIN (RIGHT OUTER JOIN)
+
+RIGHT JOIN returns all records from the right table and matching records from the left table.
+
+No matching record হলে left table-এর column-এ `NULL` দেখাবে।
+
+**Example:**
+
+```sql
+SELECT e.id, e.name, d.dept_name
+FROM employees e
+RIGHT JOIN departments d
+ON e.dept_id = d.id;
+```
+
+**Result:**
+
+| id | name | dept_name |
+|---|---|---|
+| 1 | Mamun | IT |
+| 2 | Rahim | HR |
+| NULL | NULL | Finance |
+
+**Explanation (Bangla):**
+
+Right table অর্থাৎ `departments`-এর সব records দেখাবে। Matching employee না থাকলে employee-এর column-এ `NULL` হবে।
+
+## 6. FULL OUTER JOIN
+
+FULL OUTER JOIN returns all records from both tables.
+
+Matching না থাকলে সংশ্লিষ্ট table-এর column-এ `NULL` দেখাবে।
+
+**Example:**
+
+```sql
+SELECT e.id, e.name, d.dept_name
+FROM employees e
+FULL OUTER JOIN departments d
+ON e.dept_id = d.id;
+```
+
+**Result:**
+
+| id | name | dept_name |
+|---|---|---|
+| 1 | Mamun | IT |
+| 2 | Rahim | HR |
+| 3 | Karim | NULL |
+| 4 | Hasan | NULL |
+| NULL | NULL | Finance |
+
+**Explanation (Bangla):**
+
+দুই table-এর matching এবং non-matching সব records দেখাবে।
+
+**Note:** PostgreSQL supports `FULL OUTER JOIN`, but MySQL does not directly support it. MySQL-এ `LEFT JOIN` এবং `RIGHT JOIN`-এর ফলাফল `UNION` দিয়ে combine করা যায়।
+
+## 7. JOIN Comparison
+
+| JOIN Type | Description |
+|---|---|
+| INNER JOIN | Only matching records |
+| LEFT JOIN | All left + matching right records |
+| RIGHT JOIN | All right + matching left records |
+| FULL OUTER JOIN | All records from both tables |
+
+## 8. Important SQL JOIN Concepts
+
+### 8.1 JOIN and ON
+
+- `JOIN` → কোন table-এর সাথে যুক্ত হবে।
+- `ON` → কোন condition-এর ভিত্তিতে যুক্ত হবে।
+
+### 8.2 Table Alias
+
+```sql
+SELECT e.name, d.dept_name
+FROM employees e
+JOIN departments d
+ON e.dept_id = d.id;
+```
+
+- `e` = employees table alias
+- `d` = departments table alias
+
+### 8.3 INNER JOIN vs EXISTS
+
+| JOIN | EXISTS |
+|---|---|
+| Related table-এর column থেকে data retrieve করে | Matching record আছে কি না পরীক্ষা করে |
+| দুই table-এর data combine করে | Boolean condition হিসেবে কাজ করে |
+| Duplicate rows হতে পারে | Outer table-এর একটি row একবারই return হয় |
+
+### 8.4 JOIN vs UNION
+
+| JOIN | UNION |
+|---|---|
+| Columns horizontally combine করে | Rows vertically combine করে |
+| Related columns-এর ভিত্তিতে data combine করে | Compatible SELECT results combine করে |
+| Multiple tables-এর columns দেখায় | Multiple queries-এর rows combine করে |
+
+### 8.5 Important Exam Notes
+
+- `JOIN` এবং `INNER JOIN` একই অর্থে ব্যবহৃত হয়।
+- `LEFT JOIN` = `LEFT OUTER JOIN`
+- `RIGHT JOIN` = `RIGHT OUTER JOIN`
+- `FULL JOIN` = `FULL OUTER JOIN`
+- `ON` specifies the join condition.
+- `NULL` appears when there is no matching row in an outer join.
+- `CROSS JOIN` produces a Cartesian product.
+- `SELF JOIN` joins a table with itself.
+
+## 9. Other Types of JOIN
+
+### CROSS JOIN
+
+Returns the Cartesian product of two tables.
+
+```sql
+SELECT *
+FROM employees
+CROSS JOIN departments;
+```
+
+যদি employees table-এ 4টি row এবং departments table-এ 3টি row থাকে, তাহলে result হবে `4 × 3 = 12` rows।
+
+### SELF JOIN
+
+A SELF JOIN joins a table with itself.
+
+```sql
+SELECT 
+    e.name AS employee_name,
+    m.name AS manager_name
+FROM employees e
+JOIN employees m
+ON e.manager_id = m.id;
+```
+# SQL SELF JOIN
+
+## 1. What is SELF JOIN?
+
+SELF JOIN is a technique in SQL where a table is joined with itself to retrieve related records from the same table.
+
+**বাংলায়:** একই table-এর দুইটি ভিন্ন row-এর মধ্যে relationship খুঁজে বের করার জন্য SELF JOIN ব্যবহার করা হয়।
+
+**Example:** Employee এবং Manager-এর তথ্য একই table-এ থাকলে employee-এর নামের পাশাপাশি manager-এর নাম বের করতে SELF JOIN ব্যবহার করা হয়।
+
+## 2. Example Table: employees
+
+| id | name | manager_id |
+|---|---|---|
+| 1 | Mamun | NULL |
+| 2 | Rahim | 1 |
+| 3 | Karim | 1 |
+| 4 | Hasan | 2 |
+| 5 | Sakib | 2 |
+
+**Explanation:**
+
+- Mamun-এর কোনো manager নেই।
+- Rahim-এর manager Mamun (ID: 1)।
+- Karim-এর manager Mamun (ID: 1)।
+- Hasan-এর manager Rahim (ID: 2)।
+- Sakib-এর manager Rahim (ID: 2)।
+
+## 3. SELF JOIN Query
+
+```sql
+SELECT
+    e.name AS employee_name,
+    m.name AS manager_name
+FROM employees e
+LEFT JOIN employees m
+ON e.manager_id = m.id;
+```
+
+**Result:**
+
+| employee_name | manager_name |
+|---|---|
+| Mamun | NULL |
+| Rahim | Mamun |
+| Karim | Mamun |
+| Hasan | Rahim |
+| Sakib | Rahim |
+
+## 4. Explanation (Bangla)
+
+এই query-তে একই `employees` table-কে দুইবার ব্যবহার করা হয়েছে।
+
+- `employees e` → Employee হিসেবে table ব্যবহার করা হয়েছে।
+- `employees m` → Manager হিসেবে একই table ব্যবহার করা হয়েছে।
+- `e.manager_id = m.id` → Employee-এর manager_id এবং manager-এর id match করা হয়েছে।
+
+**How it works:**
+
+1. `e` alias দিয়ে employee-এর information নেওয়া হয়।
+2. `m` alias দিয়ে manager-এর information নেওয়া হয়।
+3. `ON` condition দিয়ে employee-এর manager_id এবং manager-এর id match করা হয়।
+4. `LEFT JOIN` ব্যবহার করায় manager না থাকলেও employee result-এ থাকবে।
+
+## 5. INNER JOIN vs LEFT SELF JOIN
+
+### INNER SELF JOIN
+
+Only employees having a matching manager are returned.
+
+```sql
+SELECT
+    e.name AS employee_name,
+    m.name AS manager_name
+FROM employees e
+INNER JOIN employees m
+ON e.manager_id = m.id;
+```
+
+### LEFT SELF JOIN
+
+All employees are returned, including employees who do not have a manager.
+
+```sql
+SELECT
+    e.name AS employee_name,
+    m.name AS manager_name
+FROM employees e
+LEFT JOIN employees m
+ON e.manager_id = m.id;
+```
+
+## 6. Real-Life Use Cases
+
+SELF JOIN is commonly used for:
+
+1. Employee – Manager relationship
+2. Student – Mentor relationship
+3. Category – Parent Category relationship
+4. Organization hierarchy
+5. Employee – Supervisor relationship
+
+## 7. Important Points
+
+- SELF JOIN is not a separate JOIN keyword; it is a technique.
+- A table is joined with itself.
+- Different table aliases are required to distinguish the two references.
+- `ON` defines the relationship between the two references.
+- SELF JOIN can be used with INNER JOIN, LEFT JOIN and other JOIN types.
+
+
+
+একই table থেকে employee এবং তার manager-এর তথ্য বের করতে SELF JOIN ব্যবহার করা যায়।
+
+## 10. Job Exam Quick Revision
+
+| Question | Answer |
+|---|---|
+| Only matching records? | INNER JOIN |
+| All records from left table? | LEFT JOIN |
+| All records from right table? | RIGHT JOIN |
+| All records from both tables? | FULL OUTER JOIN |
+| Cartesian product? | CROSS JOIN |
+| Join a table with itself? | SELF JOIN |
+| Join condition keyword? | ON |
+
+## 11. Practice Questions
+
+1. Which JOIN returns only matching records?
+2. Which JOIN returns all records from the left table?
+3. Which JOIN returns all records from both tables?
+4. Which JOIN produces a Cartesian product?
+5. What is the difference between INNER JOIN and EXISTS?
+6. What is the difference between JOIN and UNION?
+7. What is SELF JOIN?
+8. What happens when there is no matching record in LEFT JOIN?
+
+---
+
+**Remember:**
+
+- INNER JOIN = Matching records
+- LEFT JOIN = All Left records
+- RIGHT JOIN = All Right records
+- FULL OUTER JOIN = All records from Both tables
+- CROSS JOIN = Cartesian Product
+- SELF JOIN = Same table joined with itself
 
