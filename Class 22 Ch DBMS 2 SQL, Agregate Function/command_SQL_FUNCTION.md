@@ -408,6 +408,167 @@ FROM employees;
 |---:|---:|---:|---:|---:|
 | 5 | 250000 | 50000 | 70000 | 30000 |
 
+# SQL IN and NOT IN Operators (DBMS)
+
+## 1. IN Operator
+
+The **IN operator** is used to check whether a value matches any value in a specified list.
+
+**বাংলায়:** IN Operator ব্যবহার করে একটি Column-এর Value নির্দিষ্ট List-এর যেকোনো Value-এর সাথে মিলে কি না তা পরীক্ষা করা হয়।
+
+### Syntax
+
+```sql
+SELECT column_name
+FROM table_name
+WHERE column_name IN (value1, value2, ...);
+```
+
+### Example Table: Employees
+
+| emp_id | name | department | salary |
+|---:|---|---|---:|
+| 1 | Abdullah | IT | 50000 |
+| 2 | Rahim | HR | 30000 |
+| 3 | Karim | IT | 60000 |
+| 4 | Hasan | HR | 40000 |
+| 5 | Mamun | Sales | 70000 |
+| 6 | Sakib | Sales | 35000 |
+
+### Example 1: Find employees from IT and HR departments.
+
+```sql
+SELECT *
+FROM employees
+WHERE department IN ('IT', 'HR');
+```
+
+**Output:** Abdullah, Rahim, Karim, Hasan.
+
+### Example 2: Find employees having salary 30000, 50000 or 70000.
+
+```sql
+SELECT *
+FROM employees
+WHERE salary IN (30000, 50000, 70000);
+```
+
+**Output:** Rahim, Abdullah, Mamun.
+
+## 2. NOT IN Operator
+
+The **NOT IN operator** is used to retrieve records whose values do not match any value in a specified list.
+
+**বাংলায়:** NOT IN Operator ব্যবহার করে নির্দিষ্ট List-এর Value বাদ দিয়ে বাকি Records বের করা হয়।
+
+### Syntax
+
+```sql
+SELECT column_name
+FROM table_name
+WHERE column_name NOT IN (value1, value2, ...);
+```
+
+### Example 1: Find employees who are NOT from IT and HR departments.
+
+```sql
+SELECT *
+FROM employees
+WHERE department NOT IN ('IT', 'HR');
+```
+
+**Output:** Mamun, Sakib (Sales).
+
+### Example 2: Find employees whose salary is NOT 30000, 50000 or 70000.
+
+```sql
+SELECT *
+FROM employees
+WHERE salary NOT IN (30000, 50000, 70000);
+```
+
+**Output:** Karim, Hasan, Sakib.
+
+## 3. IN vs NOT IN
+
+| IN | NOT IN |
+|---|---|
+| Matches values in a list | Excludes values in a list |
+| Returns matching records | Returns non-matching records |
+| Equivalent to multiple OR conditions | Equivalent to multiple AND conditions |
+
+### IN = OR Logic
+
+```sql
+SELECT *
+FROM employees
+WHERE department = 'IT'
+   OR department = 'HR';
+
+-- Equivalent to:
+SELECT *
+FROM employees
+WHERE department IN ('IT', 'HR');
+```
+
+### NOT IN = AND Logic
+
+```sql
+SELECT *
+FROM employees
+WHERE department != 'IT'
+  AND department != 'HR';
+
+-- Equivalent to:
+SELECT *
+FROM employees
+WHERE department NOT IN ('IT', 'HR');
+```
+
+## 4. IN with Subquery
+
+IN can also be used with a subquery to retrieve records based on another query's result.
+
+**Example:** Find employees who belong to departments located in Dhaka.
+
+```sql
+SELECT *
+FROM employees
+WHERE department IN (
+    SELECT department_name
+    FROM departments
+    WHERE location = 'Dhaka'
+);
+```
+
+## 5. NOT IN with Subquery
+
+**Example:** Find employees who do not belong to departments located in Dhaka.
+
+```sql
+SELECT *
+FROM employees
+WHERE department NOT IN (
+    SELECT department_name
+    FROM departments
+    WHERE location = 'Dhaka'
+);
+```
+
+## 6. Important NULL Concept
+
+Be careful when using `NOT IN` with NULL values.
+
+```sql
+SELECT *
+FROM employees
+WHERE department NOT IN ('IT', NULL);
+```
+
+**Result:** Generally, no rows are returned because comparisons involving NULL produce UNKNOWN.
+
+**Important:** When using `NOT IN` with a subquery, ensure the returned column does not contain NULL values. Alternatively, use `NOT EXISTS`.
+
 
 
 ### 4. DCL (Data Control Language)
