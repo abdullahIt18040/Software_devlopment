@@ -85,6 +85,133 @@ REVOKE INSERT ON Student FROM user1;
 
 ### 5. TCL (Transaction Control Language)
 Used to manage database transactions.
+Database Transaction হলো এক বা একাধিক SQL operation-এর সমষ্টি, যা একটি নির্দিষ্ট কাজ সম্পন্ন করে। Transaction সফল হলে সব পরিবর্তন কার্যকর হবে, আর ব্যর্থ হলে কোনো পরিবর্তন কার্যকর হবে না।
+# Database Transaction (DBMS)
+
+## 1. What is a Transaction?
+
+A **Transaction** is set of  SQL operations (INSERT, UPDATE, DELETE, SELECT) that perform a specific task.
+
+
+**বাংলায়:** Transaction হলো এক বা একাধিক SQL operation-এর সমষ্টি, যা একটি নির্দিষ্ট কাজ সম্পন্ন করে। সব operation সফল হবে অথবা কোনো পরিবর্তনই কার্যকর হবে না।
+
+## 2. Example of Database Transaction
+
+**Scenario:** Transfer 1000 টাকা from Account A to Account B.
+
+```sql
+BEGIN TRANSACTION;
+
+UPDATE accounts
+SET balance = balance - 1000
+WHERE account_id = 101;
+
+UPDATE accounts
+SET balance = balance + 1000
+WHERE account_id = 102;
+
+COMMIT;
+```
+
+If any operation fails:
+
+```sql
+ROLLBACK;
+```
+
+## 3. ACID Properties of Transaction
+
+ACID represents four important properties of database transactions.
+
+### A. Atomicity (অখণ্ডতা)
+- All operations succeed or none.
+- Either the entire transaction is completed or nothing happens.
+- Example: Money transfer must debit and credit successfully.
+
+### C. Consistency (সামঞ্জস্যতা)
+- Database must remain valid before and after a transaction.
+- All database constraints and rules must be maintained.
+
+### I. Isolation (স্বতন্ত্রতা)
+- Concurrent transactions should not interfere with each other.
+- Each transaction should execute independently.
+
+### D. Durability (স্থায়িত্ব)
+- Once a transaction is committed, changes are permanent.
+- Data remains saved even after a system crash.
+
+## 4. Transaction Control Commands (TCL)
+
+| Command | Description |
+|---|---|
+| `BEGIN` | Starts a transaction |
+| `START TRANSACTION` | Starts a transaction |
+| `COMMIT` | Permanently saves changes |
+| `ROLLBACK` | Cancels uncommitted changes |
+| `SAVEPOINT` | Creates a rollback point |
+| `ROLLBACK TO` | Rolls back to a specific savepoint |
+
+## 5. SAVEPOINT Example
+
+```sql
+BEGIN;
+
+UPDATE accounts
+SET balance = balance - 500
+WHERE account_id = 101;
+
+SAVEPOINT sp1;
+
+UPDATE accounts
+SET balance = balance + 500
+WHERE account_id = 102;
+
+ROLLBACK TO sp1;
+
+COMMIT;
+```
+
+**Explanation:**
+- `SAVEPOINT sp1` creates a temporary rollback point.
+- `ROLLBACK TO sp1` cancels operations performed after that savepoint.
+- `COMMIT` saves the remaining transaction changes.
+
+## 6. Types of Transaction
+
+1. **Read-only Transaction:** Only retrieves data.
+2. **Read-write Transaction:** Reads and modifies data.
+3. **Distributed Transaction:** Executes operations across multiple databases or systems.
+
+## 7. Real-Life Examples
+
+- Bank Money Transfer
+- Money Deposit
+- Money Withdrawal
+- Online Shopping Order
+- Payment Processing
+
+## 8. Important Exam Notes
+
+- ACID = Atomicity + Consistency + Isolation + Durability.
+- Atomicity = All or Nothing.
+- COMMIT = Permanently save changes.
+- ROLLBACK = Cancel uncommitted changes.
+- SAVEPOINT = Creates an intermediate rollback point.
+- Isolation = Prevents unwanted interference between concurrent transactions.
+- Durability = Committed changes are permanent.
+- TCL = Transaction Control Language.
+
+## 9. Quick Revision
+
+| Property | Meaning |
+|---|---|
+| Atomicity | All or Nothing |
+| Consistency | Maintains Database Rules |
+| Isolation | Independent Execution |
+| Durability | Permanent Changes |
+
+**Remember:** Database Transaction ensures data integrity, consistency, and reliability.
+# Transaction is set of operation that performs a sprcific task.
 
 | Command | Description |
 |---|---|
