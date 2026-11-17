@@ -105,3 +105,360 @@ DELETE FROM employees;
 **CRUD = Create + Read + Update + Delete**
 
 CRUD is the four fundamental operations for managing records in a database.
+# BETWEEN Operator in DBMS (SQL)
+
+## 1. Definition
+
+The `BETWEEN` operator is used to filter records within a specified range of values.
+
+- It is a range-based operator.
+- It includes both the starting and ending values (Inclusive).
+- Commonly used with numbers, dates, and text.
+
+## 2. Syntax
+
+```sql
+SELECT column_name
+FROM table_name
+WHERE column_name BETWEEN value1 AND value2;
+```
+
+- `value1`: Starting value (inclusive).
+- `value2`: Ending value (inclusive).
+
+## 3. Example: BETWEEN Operator
+
+**Employees Table**
+
+| ID | Name | Salary |
+|---|---|---|
+| 1 | Rahim | 20000 |
+| 2 | Karim | 30000 |
+| 3 | Hasan | 40000 |
+| 4 | Sakib | 50000 |
+| 5 | Rafi | 60000 |
+
+Find employees whose salary is between 30000 and 50000.
+
+```sql
+SELECT *
+FROM employees
+WHERE salary BETWEEN 30000 AND 50000;
+```
+
+**Result:**
+
+| ID | Name | Salary |
+|---|---|---|
+| 2 | Karim | 30000 |
+| 3 | Hasan | 40000 |
+| 4 | Sakib | 50000 |
+
+**Important:** Both 30000 and 50000 are included.
+
+## 4. NOT BETWEEN Operator
+
+The `NOT BETWEEN` operator returns records outside the specified range.
+
+```sql
+SELECT *
+FROM employees
+WHERE salary NOT BETWEEN 30000 AND 50000;
+```
+
+**Result:**
+
+| ID | Name | Salary |
+|---|---|---|
+| 1 | Rahim | 20000 |
+| 5 | Rafi | 60000 |
+
+## 5. BETWEEN with Dates
+
+Find employees who joined between January 1, 2025 and December 31, 2025.
+
+```sql
+SELECT *
+FROM employees
+WHERE joining_date BETWEEN '2025-01-01' AND '2025-12-31';
+```
+
+**Note:** If `joining_date` contains timestamps, the ending date may exclude records after midnight. For timestamp columns, use an exclusive upper boundary:
+
+```sql
+SELECT *
+FROM employees
+WHERE joining_date >= '2025-01-01'
+  AND joining_date < '2026-01-01';
+```
+
+## 6. BETWEEN vs IN
+
+| BETWEEN | IN |
+|---|---|
+| Checks a range of values | Checks specific values |
+| Uses `AND` | Uses comma-separated values |
+| Includes both boundaries | Matches only listed values |
+
+**BETWEEN Example:**
+
+```sql
+SELECT *
+FROM employees
+WHERE salary BETWEEN 20000 AND 50000;
+```
+
+**IN Example:**
+
+```sql
+SELECT *
+FROM employees
+WHERE salary IN (20000, 40000, 60000);
+```
+
+## 7. BETWEEN vs Comparison Operators
+
+The following queries are equivalent:
+
+```sql
+SELECT *
+FROM employees
+WHERE salary BETWEEN 30000 AND 50000;
+```
+
+```sql
+SELECT *
+FROM employees
+WHERE salary >= 30000
+  AND salary <= 50000;
+```
+
+ # LIKE Operator in DBMS (SQL)
+
+## 1. Definition
+The `LIKE` operator is used to search for a specific pattern in a column using wildcard characters.
+
+## 2. Wildcard Characters
+
+| Wildcard | Description | Example |
+|---|---|---|
+| `%` | Matches zero or more characters | `'A%'` |
+| `_` | Matches exactly one character | `'A_'` |
+
+## 3. Examples
+
+```sql
+-- Names starting with A
+SELECT * FROM employees
+WHERE name LIKE 'A%';
+
+-- Names ending with n
+SELECT * FROM employees
+WHERE name LIKE '%n';
+
+-- Names containing "ah"
+SELECT * FROM employees
+WHERE name LIKE '%ah%';
+
+-- Names with exactly 4 characters
+SELECT * FROM employees
+WHERE name LIKE '____';
+
+-- Names where the second character is 'a'
+SELECT * FROM employees
+WHERE name LIKE '_a%';
+```
+
+## 4. NOT LIKE Operator
+
+Used to find records that do not match a specified pattern.
+
+```sql
+SELECT * FROM employees
+WHERE name NOT LIKE 'A%';
+```
+
+## 5. Important Exam Notes
+
+- `%` = Zero or more characters.
+- `_` = Exactly one character.
+- `LIKE` = Pattern matching.
+- `NOT LIKE` = Excludes matching patterns.
+- Case sensitivity depends on the database and collation.
+
+# LIMIT Clause in DBMS (SQL)
+
+## 1. Definition
+The `LIMIT` clause is used to restrict the number of rows returned by a query.
+
+## 2. Syntax
+
+```sql
+SELECT column_name
+FROM table_name
+LIMIT number;
+```
+
+## 3. Examples
+
+```sql
+-- Get the first 5 employees
+SELECT *
+FROM employees
+LIMIT 5;
+
+-- Skip first 5 rows and get next 5 rows
+SELECT *
+FROM employees
+LIMIT 5 OFFSET 5;
+```
+
+## 4. LIMIT with ORDER BY
+
+```sql
+-- Get the top 3 highest-paid employees
+SELECT *
+FROM employees
+ORDER BY salary DESC
+LIMIT 3;
+```
+
+## 5. Database Compatibility
+
+| Database | Syntax |
+|---|---|
+| MySQL | `LIMIT 5` |
+| PostgreSQL | `LIMIT 5` |
+| SQLite | `LIMIT 5` |
+| Oracle 12c+ | `FETCH FIRST 5 ROWS ONLY` |
+| SQL Server | `TOP 5` or `OFFSET/FETCH` |
+
+## 6. Important Exam Notes
+
+- `LIMIT` restricts the number of returned rows.
+- `LIMIT n` returns at most `n` rows.
+- `OFFSET n` skips the first `n` rows.
+- Use `ORDER BY` with `LIMIT` for predictable results.
+- `LIMIT` is supported in MySQL and PostgreSQL but not standard Oracle or SQL Server syntax.
+
+**Remember:** `LIMIT` = Restrict the number of rows returned. 
+# Find Second Highest Salary Using Subquery (SQL)
+
+## 1. SQL Query
+
+```sql
+SELECT MAX(salary)
+FROM employees
+WHERE salary < (
+    SELECT MAX(salary)
+    FROM employees
+);
+```
+
+## 2. Explanation
+
+1. **Inner Query:** Finds the highest salary using `MAX()`.
+2. **Outer Query:** Finds the maximum salary that is less than the highest salary.
+
+## 3. Example
+
+| Employee | Salary |
+|---|---:|
+| Rahim | 20000 |
+| Karim | 30000 |
+| Hasan | 40000 |
+| Sakib | 50000 |
+| Rafi | 60000 |
+
+**Output:**
+
+```text
+50000
+```
+
+## 4. Query Execution
+
+```sql
+-- Step 1: Find highest salary
+SELECT MAX(salary)
+FROM employees;
+-- Output: 60000
+
+-- Step 2: Find second highest salary
+SELECT MAX(salary)
+FROM employees
+WHERE salary < 60000;
+-- Output: 50000
+```
+
+## 5. Important Notes
+
+- `MAX()` returns the highest value.
+- A subquery is a query nested inside another query.
+- `<` excludes the highest salary.
+- This query finds the second-highest **distinct** salary, even if the highest salary occurs multiple times.
+- If there is no second distinct salary, the result is `NULL`.
+
+**Remember:**
+
+Second Highest Salary = `MAX(salary)` where `salary` is less than the highest salary.
+# Find Second Minimum Salary Using Subquery (SQL)
+
+## 1. SQL Query
+
+```sql
+SELECT MIN(salary)
+FROM employees
+WHERE salary > (
+    SELECT MIN(salary)
+    FROM employees
+);
+```
+
+## 2. Explanation
+
+1. **Inner Query:** Finds the minimum salary using `MIN()`.
+2. **Outer Query:** Finds the minimum salary greater than the lowest salary.
+
+## 3. Example
+
+| Employee | Salary |
+|---|---:|
+| Rahim | 20000 |
+| Karim | 30000 |
+| Hasan | 40000 |
+| Sakib | 50000 |
+| Rafi | 60000 |
+
+**Output:**
+
+```text
+30000
+```
+
+## 4. Query Execution
+
+```sql
+-- Step 1: Find minimum salary
+SELECT MIN(salary)
+FROM employees;
+-- Output: 20000
+
+-- Step 2: Find second minimum salary
+SELECT MIN(salary)
+FROM employees
+WHERE salary > 20000;
+-- Output: 30000
+```
+
+## 5. Important Notes
+
+- `MIN()` returns the lowest value.
+- `>` excludes the minimum salary.
+- This query finds the second-lowest **distinct salary**.
+- Duplicate minimum salaries are ignored.
+- If no second distinct salary exists, the result is `NULL`.
+
+## Remember
+
+**Second Minimum Salary = MIN(salary) greater than the minimum salary.**
