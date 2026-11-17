@@ -18,5 +18,17 @@ GROUP BY Department;
 
 <img width="852" height="394" alt="image" src="https://github.com/user-attachments/assets/93322b19-ad39-4537-ae4e-3cc5637ebe65" />
 
+```
+
+SELECT
+    HospitalName,
+    PatientCount
+FROM Hospital
+WHERE Specialization = 'Accident Treatment'
+ORDER BY PatientCount DESC
+LIMIT 5;
+
+```
+
 ![Uploading image.png…]()
 
