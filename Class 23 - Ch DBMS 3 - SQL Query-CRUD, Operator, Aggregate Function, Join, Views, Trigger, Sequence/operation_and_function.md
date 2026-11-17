@@ -462,3 +462,110 @@ WHERE salary > 20000;
 ## Remember
 
 **Second Minimum Salary = MIN(salary) greater than the minimum salary.**
+# CREATE VIEW in DBMS (SQL)
+
+## 1. Definition
+
+A **VIEW** is a virtual table created from the result of an SQL query.
+
+- A VIEW usually does not store data separately.
+- It displays data from one or more existing tables.
+- Changes in the original table are reflected in the VIEW.
+
+## 2. Syntax
+
+```sql
+CREATE VIEW view_name AS
+SELECT column1, column2
+FROM table_name
+WHERE condition;
+```
+
+## 3. Example: Create a VIEW
+
+**Employees Table**
+
+| ID | Name | Salary | Department |
+|---|---|---:|---|
+| 1 | Rahim | 30000 | IT |
+| 2 | Karim | 40000 | HR |
+| 3 | Hasan | 50000 | IT |
+
+Create a VIEW for IT department employees.
+
+```sql
+CREATE VIEW it_employees AS
+SELECT id, name, salary
+FROM employees
+WHERE department = 'IT';
+```
+
+## 4. Retrieve Data from VIEW
+
+```sql
+SELECT * FROM it_employees;
+```
+
+**Output:**
+
+| ID | Name | Salary |
+|---|---|---:|
+| 1 | Rahim | 30000 |
+| 3 | Hasan | 50000 |
+
+**Explanation:** `it_employees` behaves like a table, but it is a VIEW based on the original `employees` table.
+
+## 5. CREATE OR REPLACE VIEW
+
+Used to create a VIEW or replace its existing definition.
+
+```sql
+CREATE OR REPLACE VIEW it_employees AS
+SELECT id, name, salary, department
+FROM employees
+WHERE department = 'IT';
+```
+
+## 6. DROP VIEW
+
+Used to delete a VIEW.
+
+```sql
+DROP VIEW it_employees;
+```
+
+**Note:** It deletes only the VIEW definition, not the original table or its data.
+
+## 7. Advantages of VIEW
+
+| Advantage | Explanation |
+|---|---|
+| Security | Restricts access to selected rows or columns |
+| Simplicity | Simplifies complex SQL queries |
+| Reusability | Reuses frequently executed queries |
+| Data Abstraction | Hides unnecessary table details |
+
+## 8. VIEW vs TABLE
+
+| VIEW | TABLE |
+|---|---|
+| Virtual table | Physical database table |
+| Usually does not store data separately | Stores actual data |
+| Based on SQL query | Stores records directly |
+| Created using `CREATE VIEW` | Created using `CREATE TABLE` |
+
+## 9. Important Exam Notes
+
+1. VIEW is also called a Virtual Table.
+2. `CREATE VIEW` is used to create a VIEW.
+3. A VIEW can be created from one or multiple tables.
+4. A normal VIEW stores its query definition, not a separate copy of data.
+5. Changes in the original table are reflected in the VIEW.
+6. Some simple views support `INSERT`, `UPDATE`, and `DELETE`, subject to database restrictions.
+7. A Materialized VIEW physically stores query results.
+
+## Remember
+
+**VIEW = Virtual Table + SQL Query**
+
+A VIEW provides a customized way to display data from existing database tables.
