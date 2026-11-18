@@ -186,6 +186,63 @@ CREATE TABLE STUDENT (
 
 <img width="878" height="379" alt="image" src="https://github.com/user-attachments/assets/f588ce91-8d3e-431f-8afd-3f767f891d68" />
 
+# SQL – Find Students Enrolled in at Least Two Courses
 
+## 1. Problem
+
+Find the Student IDs (`S_id`) who are enrolled in at least two courses.
+
+## 2. Student Table
+
+| S_id | C_id | Year |
+|---|---|---|
+| S1 | C1 | 2026 |
+| S2 | C2 | 2025 |
+| S1 | C2 | 2024 |
+
+## 3. SQL Query
+
+```sql
+SELECT S_id
+FROM Student
+GROUP BY S_id
+HAVING COUNT(DISTINCT C_id) >= 2;
+```
+
+## 4. Explanation
+
+- `GROUP BY S_id` → Groups records by student ID.
+- `COUNT(DISTINCT C_id)` → Counts unique courses for each student.
+- `HAVING COUNT(DISTINCT C_id) >= 2` → Returns students enrolled in at least two different courses.
+
+## 5. Expected Output
+
+| S_id |
+|---|
+| S1 |
+
+**Reason:**
+- S1 → C1, C2 = 2 courses.
+- S2 → C2 = 1 course.
+
+## 6. Important Exam Notes
+
+| SQL | Purpose |
+|---|---|
+| GROUP BY | Groups records |
+| COUNT() | Counts records |
+| COUNT(DISTINCT) | Counts unique values |
+| HAVING | Filters grouped results |
+
+### Remember
+
+To find students enrolled in at least N different courses:
+
+```sql
+SELECT S_id
+FROM Student
+GROUP BY S_id
+HAVING COUNT(DISTINCT C_id) >= N;
+```
 ![Uploading image.png…]()
 
