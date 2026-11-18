@@ -253,6 +253,7 @@ GROUP BY EmpName
 HAVING COUNT(*) > 1;
 
 ```
+<img width="858" height="353" alt="image" src="https://github.com/user-attachments/assets/595a42e1-225b-4279-8091-4f4ec6bedf7c" />
 
 ![Uploading image.png…]()
 
