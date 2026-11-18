@@ -244,5 +244,15 @@ FROM Student
 GROUP BY S_id
 HAVING COUNT(DISTINCT C_id) >= N;
 ```
+<img width="878" height="298" alt="image" src="https://github.com/user-attachments/assets/2e3b07cf-16db-40a6-9885-afb226d2a322" />
+
+```
+SELECT EmpName, COUNT(*) AS DuplicateCount
+FROM Employee
+GROUP BY EmpName
+HAVING COUNT(*) > 1;
+
+```
+
 ![Uploading image.png…]()
 
