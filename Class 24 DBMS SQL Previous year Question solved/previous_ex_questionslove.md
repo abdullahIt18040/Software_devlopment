@@ -137,5 +137,16 @@ To find employees whose salary is greater than the overall average salary, use:
 ```sql
 WHERE Salary > (SELECT AVG(Salary) FROM Employees);
 ```
+
+<img width="889" height="374" alt="image" src="https://github.com/user-attachments/assets/b36abc65-b3b1-4368-a777-dd0af40e86c3" />
+
+```
+SELECT
+    Department,
+    COUNT(EmployeeID) AS TotalEmployees,
+    AVG(Salary) AS AverageSalary
+FROM Employees
+GROUP BY Department;
+```
 ![Uploading image.png…]()
 
