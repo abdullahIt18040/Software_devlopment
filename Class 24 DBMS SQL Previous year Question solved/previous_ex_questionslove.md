@@ -147,6 +147,45 @@ SELECT
     AVG(Salary) AS AverageSalary
 FROM Employees
 GROUP BY Department;
+
 ```
+
+<img width="880" height="159" alt="image" src="https://github.com/user-attachments/assets/b42071b6-f09f-46f3-b2f6-07d3d1cf3d4b" />
+
+# SQL CREATE TABLE – STUDENT
+
+## 1. SQL Query
+
+```sql
+CREATE TABLE STUDENT (
+    RollNumber INT PRIMARY KEY,
+    Name VARCHAR(100) NOT NULL,
+    Department VARCHAR(50),
+    Email VARCHAR(100) UNIQUE,
+    AdmissionDate DATE
+);
+```
+
+## 2. Data Types
+
+| Column | Data Type | Purpose |
+|---|---|---|
+| RollNumber | INT | Numeric roll number |
+| Name | VARCHAR(100) | Student name |
+| Department | VARCHAR(50) | Department name |
+| Email | VARCHAR(100) | Email address |
+| AdmissionDate | DATE | Admission date |
+
+## 3. Primary Key
+
+**RollNumber** is the Primary Key because:
+
+- Uniquely identifies each student.
+- Cannot contain NULL.
+- Does not allow duplicate values.
+
+<img width="878" height="379" alt="image" src="https://github.com/user-attachments/assets/f588ce91-8d3e-431f-8afd-3f767f891d68" />
+
+
 ![Uploading image.png…]()
 
