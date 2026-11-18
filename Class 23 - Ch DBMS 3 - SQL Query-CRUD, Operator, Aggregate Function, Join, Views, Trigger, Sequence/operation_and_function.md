@@ -568,4 +568,440 @@ DROP VIEW it_employees;
 
 **VIEW = Virtual Table + SQL Query**
 
-A VIEW provides a customized way to display data from existing database tables.
+# Sequence in DBMS (Oracle)
+
+## 1. What is a Sequence?
+
+A **Sequence** is a database object used to automatically generate numeric values, commonly used for generating Primary Keys (IDs).
+
+**Example:** Employee ID, Customer ID, Account ID, etc.
+
+Instead of manually inserting IDs, a Sequence generates them automatically.
+
+## 2. Create Sequence
+
+```sql
+CREATE SEQUENCE emp_seq
+START WITH 1
+INCREMENT BY 1
+MINVALUE 1
+MAXVALUE 100
+NOCYCLE;
+```
+
+### Explanation
+
+| Keyword | Description |
+|---|---|
+| START WITH | Starting value |
+| INCREMENT BY | Value increase per execution |
+| MINVALUE | Minimum allowed value |
+| MAXVALUE | Maximum allowed value |
+| CACHE | Stores sequence values in memory |
+| NOCACHE | Does not cache sequence values |
+| CYCLE | Restarts after reaching the maximum |
+| NOCYCLE | Does not restart after reaching the maximum |
+
+## 3. NEXTVAL
+
+`NEXTVAL` generates and returns the next sequence value.
+
+```sql
+SELECT emp_seq.NEXTVAL FROM dual;
+```
+
+**Output (successive executions):**
+
+```text
+1
+2
+3
+4
+5
+```
+
+Each execution generates a new value.
+
+## 4. CURRVAL
+
+`CURRVAL` returns the last generated sequence value in the current session.
+
+```sql
+SELECT emp_seq.CURRVAL FROM dual;
+```
+
+**Example:**
+
+If the last `NEXTVAL` returned `5`, then:
+
+```text
+CURRVAL = 5
+```
+
+**Note:** You must execute `NEXTVAL` before using `CURRVAL` in the same session.
+
+## 5. Practical Example: Employee Table
+
+### Step 1: Create Table
+
+```sql
+CREATE TABLE employees (
+    emp_id NUMBER PRIMARY KEY,
+    emp_name VARCHAR2(50),
+    salary NUMBER
+);
+```
+
+### Step 2: Create Sequence
+
+```sql
+CREATE SEQUENCE emp_seq
+START WITH 1
+INCREMENT BY 1;
+```
+
+### Step 3: Insert Data Using Sequence
+
+```sql
+INSERT INTO employees (emp_id, emp_name, salary)
+VALUES (emp_seq.NEXTVAL, 'Mamun', 30000);
+
+INSERT INTO employees (emp_id, emp_name, salary)
+VALUES (emp_seq.NEXTVAL, 'Rahim', 35000);
+
+INSERT INTO employees (emp_id, emp_name, salary)
+VALUES (emp_seq.NEXTVAL, 'Karim', 40000);
+```
+
+### Step 4: View Data
+
+```sql
+SELECT * FROM employees;
+```
+
+**Expected Output:**
+
+| EMP_ID | EMP_NAME | SALARY |
+|---:|---|---:|
+| 1 | Mamun | 30000 |
+| 2 | Rahim | 35000 |
+| 3 | Karim | 40000 |
+
+The Sequence automatically generates employee IDs.
+
+## 6. ALTER SEQUENCE
+
+Used to modify sequence properties.
+
+```sql
+ALTER SEQUENCE emp_seq
+INCREMENT BY 2;
+```
+
+If the last generated value was `3`, subsequent values will be:
+
+```text
+5, 7, 9, 11...
+```
+
+## 7. DROP SEQUENCE
+
+Used to delete a Sequence.
+
+```sql
+DROP SEQUENCE emp_seq;
+```
+
+**Note:** Dropping a Sequence does not delete existing table records.
+
+## 8. NEXTVAL vs CURRVAL
+
+| NEXTVAL | CURRVAL |
+|---|---|
+| Generates the next value | Returns the current value |
+| Changes sequence value | Does not change sequence value |
+| Used to generate new IDs | Used to retrieve the last generated ID |
+
+## 9. Important Interview Questions
+
+**Q1. What is a Sequence?**
+
+An object used to generate numeric values automatically.
+
+**Q2. What is NEXTVAL?**
+
+Generates and returns the next sequence value.
+
+**Q3. What is CURRVAL?**
+
+Returns the last generated sequence value in the current session.
+
+**Q4. Can multiple users use the same Sequence?**
+
+Yes, multiple users can access the same Sequence.
+
+**Q5. Are Sequence values rolled back after ROLLBACK?**
+
+No. Sequence values are not transactional.
+
+**Q6. Does a Sequence guarantee gap-free numbers?**
+
+No. Gaps may occur due to rollbacks, caching, or unused values.
+
+**Q7. Is a Sequence automatically associated with a Primary Key?**
+
+No. It must be explicitly used in an INSERT statement or configured as a column default.
+
+## 10. Quick Revision
+
+| Command | Purpose |
+|---|---|
+| `CREATE SEQUENCE` | Create a Sequence |
+| `NEXTVAL` | Generate next value |
+| `CURRVAL` | Get current session value |
+| `ALTER SEQUENCE` | Modify Sequence |
+| `DROP SEQUENCE` | Delete Sequence |
+
+# Trigger in DBMS (Oracle)
+
+## 1. What is a Trigger?
+
+A **Trigger** is a database object that automatically executes when a specific database event occurs.
+
+**Common Uses:**
+- Automatically maintain audit logs.
+- Track INSERT, UPDATE and DELETE operations.
+- Validate data before insertion.
+- Maintain data consistency.
+
+## 2. Types of Triggers
+
+### Based on Execution Time
+
+| Type | Description |
+|---|---|
+| BEFORE | Executes before a database operation |
+| AFTER | Executes after a database operation |
+| INSTEAD OF | Executes instead of an operation, commonly on views |
+
+### Based on Execution Level
+
+| Type | Description |
+|---|---|
+| Row-Level | Executes for each affected row |
+| Statement-Level | Executes once per SQL statement |
+
+## 3. Create Table
+
+```sql
+CREATE TABLE employees (
+    emp_id NUMBER PRIMARY KEY,
+    emp_name VARCHAR2(50),
+    salary NUMBER
+);
+```
+
+## 4. BEFORE INSERT Trigger
+
+Executes before inserting a new record.
+
+```sql
+CREATE OR REPLACE TRIGGER before_emp_insert
+BEFORE INSERT ON employees
+FOR EACH ROW
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Before inserting employee');
+END;
+/
+```
+
+**Example:**
+
+```sql
+INSERT INTO employees
+VALUES (1, 'Mamun', 30000);
+```
+
+**Output:**
+```text
+Before inserting employee
+```
+
+## 5. AFTER INSERT Trigger
+
+Executes after inserting a new record.
+
+```sql
+CREATE OR REPLACE TRIGGER after_emp_insert
+AFTER INSERT ON employees
+FOR EACH ROW
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Employee inserted successfully');
+END;
+/
+```
+
+## 6. BEFORE UPDATE Trigger
+
+Executes before updating a record.
+
+```sql
+CREATE OR REPLACE TRIGGER before_emp_update
+BEFORE UPDATE ON employees
+FOR EACH ROW
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Employee data is being updated');
+END;
+/
+```
+
+**Example:**
+
+```sql
+UPDATE employees
+SET salary = 40000
+WHERE emp_id = 1;
+```
+
+## 7. OLD and NEW Keywords
+
+Oracle provides two special references in row-level triggers.
+
+| Keyword | Description |
+|---|---|
+| `:OLD` | Previous column value |
+| `:NEW` | New column value |
+
+**Example:**
+
+```sql
+CREATE OR REPLACE TRIGGER check_salary_update
+BEFORE UPDATE OF salary ON employees
+FOR EACH ROW
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Old Salary: ' || :OLD.salary);
+    DBMS_OUTPUT.PUT_LINE('New Salary: ' || :NEW.salary);
+END;
+/
+```
+
+**Execute:**
+
+```sql
+UPDATE employees
+SET salary = 45000
+WHERE emp_id = 1;
+```
+
+**Output:**
+```text
+Old Salary: 30000
+New Salary: 45000
+```
+
+**Remember:**
+- `:OLD` = Previous value
+- `:NEW` = New value
+
+## 8. Practical Example: Salary Audit Trigger
+
+Whenever an employee's salary changes, automatically store the old and new salary in an audit table.
+
+### Step 1: Create Audit Table
+
+```sql
+CREATE TABLE salary_audit (
+    emp_id NUMBER,
+    old_salary NUMBER,
+    new_salary NUMBER,
+    changed_date DATE
+);
+```
+
+### Step 2: Create Trigger
+
+```sql
+CREATE OR REPLACE TRIGGER salary_audit_trigger
+AFTER UPDATE OF salary ON employees
+FOR EACH ROW
+BEGIN
+    INSERT INTO salary_audit
+    VALUES (
+        :OLD.emp_id,
+        :OLD.salary,
+        :NEW.salary,
+        SYSDATE
+    );
+END;
+/
+```
+
+### Step 3: Update Salary
+
+```sql
+UPDATE employees
+SET salary = 50000
+WHERE emp_id = 1;
+```
+
+### Step 4: Check Audit Table
+
+```sql
+SELECT * FROM salary_audit;
+```
+
+**Expected Output:**
+
+| EMP_ID | OLD_SALARY | NEW_SALARY |
+|---|---:|---:|
+| 1 | 30000 | 50000 |
+
+**Explanation:** The trigger automatically inserts salary-change information into the audit table.
+
+## 9. DELETE Trigger
+
+Executes after deleting a record.
+
+```sql
+CREATE OR REPLACE TRIGGER after_emp_delete
+AFTER DELETE ON employees
+FOR EACH ROW
+BEGIN
+    DBMS_OUTPUT.PUT_LINE(
+        'Deleted Employee: ' || :OLD.emp_name
+    );
+END;
+/
+```
+
+**Example:**
+
+```sql
+DELETE FROM employees
+WHERE emp_id = 1;
+```
+
+For DELETE operations:
+- `:OLD` contains the deleted row's previous values.
+- `:NEW` is not available.
+
+## 10. Enable, Disable and Drop Trigger
+
+**Disable Trigger:**
+
+```sql
+ALTER TRIGGER salary_audit_trigger DISABLE;
+```
+
+**Enable Trigger:**
+
+```sql
+ALTER TRIGGER salary_audit_trigger ENABLE;
+```
+
+**Drop Trigger:**
+
+```sql
+DROP TRIGGER salary_audit_trigger;
+```
+
