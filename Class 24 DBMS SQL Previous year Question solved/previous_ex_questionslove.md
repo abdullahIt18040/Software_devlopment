@@ -29,6 +29,113 @@ ORDER BY PatientCount DESC
 LIMIT 5;
 
 ```
+<img width="1141" height="175" alt="image" src="https://github.com/user-attachments/assets/f16d6f24-ea97-4c85-810a-33d2ae64d532" />
+# SQL Aggregate Function in WHERE Clause
 
+## 1. Problem
+
+Consider the following SQL query:
+
+```sql
+SELECT EmployeeName, Salary
+FROM Employees
+WHERE Salary > AVG(Salary);
+```
+
+**Question:** Why does this query generate an error?
+
+## 2. Reason
+
+Aggregate functions such as `AVG()`, `SUM()`, `COUNT()`, `MAX()`, and `MIN()` cannot be used directly in the `WHERE` clause.
+
+- `WHERE` filters individual rows before aggregation.
+- `AVG()` calculates an aggregate value.
+- Therefore, we cannot directly use `AVG()` inside `WHERE`.
+
+## 3. Solution: Using Subquery
+
+```sql
+SELECT EmployeeName, Salary
+FROM Employees
+WHERE Salary > (
+    SELECT AVG(Salary)
+    FROM Employees
+);
+```
+
+**Explanation:**
+
+1. The inner query calculates the average salary of all employees.
+2. The outer query selects employees whose salary is greater than the average salary.
+
+## 4. Example
+
+**Employees Table**
+
+| EmployeeName | Salary |
+|---|---:|
+| Rahim | 20000 |
+| Karim | 30000 |
+| Hasan | 40000 |
+| Sumon | 50000 |
+
+**Average Salary:**
+
+```sql
+SELECT AVG(Salary)
+FROM Employees;
+```
+
+Output:
+
+```text
+35000
+```
+
+**Final Output**
+
+| EmployeeName | Salary |
+|---|---:|
+| Hasan | 40000 |
+| Sumon | 50000 |
+
+## 5. WHERE vs HAVING
+
+| WHERE | HAVING |
+|---|---|
+| Filters individual rows | Filters groups |
+| Applied before GROUP BY | Applied after GROUP BY |
+| Cannot directly use aggregate functions | Can use aggregate functions |
+
+### Example: Using HAVING
+
+```sql
+SELECT DepartmentID, AVG(Salary) AS AverageSalary
+FROM Employees
+GROUP BY DepartmentID
+HAVING AVG(Salary) > 35000;
+```
+
+## 6. Important Exam Notes
+
+- `WHERE` → Filters rows before grouping.
+- `GROUP BY` → Groups rows based on column values.
+- `HAVING` → Filters grouped results.
+- `AVG()` → Calculates average value.
+- `SUM()` → Calculates total value.
+- `COUNT()` → Counts rows.
+- `MAX()` → Finds maximum value.
+- `MIN()` → Finds minimum value.
+- **Subquery** → Can calculate an aggregate value for comparison in `WHERE`.
+
+### Exam Tip
+
+To find employees whose salary is greater than the overall average salary, use:
+
+**Subquery + AVG() + WHERE**
+
+```sql
+WHERE Salary > (SELECT AVG(Salary) FROM Employees);
+```
 ![Uploading image.png…]()
 
