@@ -255,5 +255,95 @@ HAVING COUNT(*) > 1;
 ```
 <img width="858" height="353" alt="image" src="https://github.com/user-attachments/assets/595a42e1-225b-4279-8091-4f4ec6bedf7c" />
 
+# SQL – Self Join and Department-wise Total Salary
+
+## 1. Find Manager Names for Each Employee
+
+**Concept: SELF JOIN**
+
+```sql
+SELECT
+    E.Ename AS EmployeeName,
+    M.Ename AS ManagerName
+FROM Employee E
+LEFT JOIN Employee M
+    ON E.M_ID = M.E_ID;
+```
+
+### Expected Output
+
+| EmployeeName | ManagerName |
+|---|---|
+| Rahim | Hasan |
+| Karim | Hasan |
+| Sakib | Nabil |
+| Hasan | NULL |
+| Nabil | NULL |
+
+### Explanation
+
+- `E` → Employee table alias.
+- `M` → Manager table alias.
+- `E.M_ID = M.E_ID` → Matches manager ID with employee ID.
+- `LEFT JOIN` → Includes employees without managers.
+
+---
+
+## 2. Calculate Total Salary of Each Department
+
+**Concept: JOIN + GROUP BY + SUM() + ORDER BY**
+
+```sql
+SELECT
+    D.Dept_Name,
+    SUM(D.Salary) AS TotalSalary
+FROM Employee E
+JOIN Department D
+    ON E.E_ID = D.E_ID
+GROUP BY D.Dept_Name
+ORDER BY TotalSalary DESC;
+```
+
+### Expected Output
+
+| Dept_Name | TotalSalary |
+|---|---:|
+| IT | 150000 |
+| HR | 80000 |
+
+### Explanation
+
+- `JOIN` → Combines Employee and Department records.
+- `SUM(D.Salary)` → Calculates total salary.
+- `GROUP BY D.Dept_Name` → Groups records by department.
+- `ORDER BY TotalSalary DESC` → Sorts highest to lowest.
+
+---
+
+## 3. Important Exam Notes
+
+| Concept | SQL |
+|---|---|
+| Self Join | Joins a table with itself |
+| Manager Name | `E.M_ID = M.E_ID` |
+| Total Salary | `SUM(Salary)` |
+| Department-wise calculation | `GROUP BY Dept_Name` |
+| Highest to Lowest | `ORDER BY Salary DESC` |
+| Lowest to Highest | `ORDER BY Salary ASC` |
+
+## 4. Remember
+
+```sql
+-- Employee and Manager
+SELF JOIN + ON
+
+-- Department-wise total salary
+JOIN + GROUP BY + SUM()
+
+-- Descending order
+ORDER BY TotalSalary DESC
+```
+
+
 ![Uploading image.png…]()
 
