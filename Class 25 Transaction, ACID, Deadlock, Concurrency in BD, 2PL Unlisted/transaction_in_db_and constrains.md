@@ -327,6 +327,7 @@ Two operations conflict if:
 A schedule is View Serializable if it is view-equivalent to a Serial Schedule.
 
 <img width="927" height="492" alt="image" src="https://github.com/user-attachments/assets/b8a1034a-e637-4692-b62d-d1a2beeb36b5" />
+<img width="812" height="558" alt="image" src="https://github.com/user-attachments/assets/763a9158-cc0f-4fb7-99f0-64b23d192a05" />
 
 Three conditions must be satisfied:
 
