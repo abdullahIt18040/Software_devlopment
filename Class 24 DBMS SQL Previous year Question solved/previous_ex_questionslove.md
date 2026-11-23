@@ -1129,6 +1129,20 @@ If a manager leaves an organization, employees may remain in the system but temp
 
 Unlike CASCADE, RESTRICT and SET NULL, Soft Delete is an application/database design approach, not a Foreign Key ON DELETE action.
 
+Soft Delete = Record থাকবে, শুধু  status Inactive হবে।
+
+
+
+Hard Delete = Record Database থেকে মুছে যাবে।
+
+যদি Employee-এর Record permanently delete করা হয়, তাহলে গুরুত্বপূর্ণ Historical Information হারিয়ে যেতে পারে।
+
+কিন্তু Soft Delete করলে:
+1. পুরোনো Employee Record সংরক্ষিত থাকে।
+2. Audit ও Historical Report তৈরি করা যায়।
+3. ভুল করে Inactive করলে Restore করা যায়।
+4. Data Loss-এর ঝুঁকি কমে।
+5. 
 **Example:**
 
 Suppose we have a Managers table with an additional Status column.
