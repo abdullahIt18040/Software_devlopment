@@ -344,6 +344,416 @@ JOIN + GROUP BY + SUM()
 ORDER BY TotalSalary DESC
 ```
 
+<img width="905" height="484" alt="image" src="https://github.com/user-attachments/assets/fdb21624-c0ad-440c-8ca0-abd9df98c8fc" />
+<img width="785" height="405" alt="image" src="https://github.com/user-attachments/assets/2a927d04-4f8c-4845-a18b-6dd12b561cbf" />
+
+# SQL JOIN (DBMS) – Job Exam Notes
+
+## 1. Introduction
+
+**JOIN** is used to combine rows from two or more tables based on a related column.
+
+### Given Tables
+
+**Customers**
+
+| id | firstName |
+|---|---|
+| 1 | Rahim |
+| 2 | Karim |
+| 3 | Belal |
+| 4 | Rony |
+| 5 | Helal |
+
+**Orders**
+
+| Order_id | amount | Customer_id |
+|---|---:|---:|
+| 1 | 200 | 10 |
+| 2 | 500 | 3 |
+| 3 | 300 | 6 |
+| 4 | 800 | 5 |
+| 5 | 150 | 8 |
+
+**Join Condition:**
+
+```sql
+ON Customers.id = Orders.Customer_id
+```
+
+---
+
+## 2. INNER JOIN
+
+**Definition:** Returns only matching records from both tables.
+
+```sql
+SELECT C.id, C.firstName, O.Order_id, O.amount
+FROM Customers C
+INNER JOIN Orders O
+ON C.id = O.Customer_id;
+```
+
+**Output:**
+
+| id | firstName | Order_id | amount |
+|---|---|---:|---:|
+| 3 | Belal | 2 | 500 |
+| 5 | Helal | 4 | 800 |
+
+**Key Point:** Only matching records are returned.
+
+---
+
+## 3. LEFT JOIN (LEFT OUTER JOIN)
+
+**Definition:** Returns all records from the left table and matching records from the right table. If no match exists, right table columns contain NULL.
+
+```sql
+SELECT C.id, C.firstName, O.Order_id, O.amount
+FROM Customers C
+LEFT JOIN Orders O
+ON C.id = O.Customer_id;
+```
+
+**Output:**
+
+| id | firstName | Order_id | amount |
+|---|---|---:|---:|
+| 1 | Rahim | NULL | NULL |
+| 2 | Karim | NULL | NULL |
+| 3 | Belal | 2 | 500 |
+| 4 | Rony | NULL | NULL |
+| 5 | Helal | 4 | 800 |
+
+**Key Point:** All rows from the LEFT table are returned.
+
+---
+
+## 4. RIGHT JOIN (RIGHT OUTER JOIN)
+
+**Definition:** Returns all records from the right table and matching records from the left table. If no match exists, left table columns contain NULL.
+
+```sql
+SELECT C.id, C.firstName, O.Order_id, O.amount, O.Customer_id
+FROM Customers C
+RIGHT JOIN Orders O
+ON C.id = O.Customer_id;
+```
+
+**Output:**
+
+| id | firstName | Order_id | amount | Customer_id |
+|---|---|---:|---:|---:|
+| NULL | NULL | 1 | 200 | 10 |
+| 3 | Belal | 2 | 500 | 3 |
+| NULL | NULL | 3 | 300 | 6 |
+| 5 | Helal | 4 | 800 | 5 |
+| NULL | NULL | 5 | 150 | 8 |
+
+**Key Point:** All rows from the RIGHT table are returned.
+
+---
+
+## 5. FULL OUTER JOIN
+
+**Definition:** Returns all records from both tables. Matching records are combined, and non-matching records contain NULL.
+
+```sql
+SELECT C.id, C.firstName, O.Order_id, O.amount, O.Customer_id
+FROM Customers C
+FULL OUTER JOIN Orders O
+ON C.id = O.Customer_id;
+```
+
+**Output:**
+
+| id | firstName | Order_id | amount | Customer_id |
+|---|---|---:|---:|---:|
+| 1 | Rahim | NULL | NULL | NULL |
+| 2 | Karim | NULL | NULL | NULL |
+| 3 | Belal | 2 | 500 | 3 |
+| 4 | Rony | NULL | NULL | NULL |
+| 5 | Helal | 4 | 800 | 5 |
+| NULL | NULL | 1 | 200 | 10 |
+| NULL | NULL | 3 | 300 | 6 |
+| NULL | NULL | 5 | 150 | 8 |
+
+
+
+---
+
+
+<img width="929" height="262" alt="image" src="https://github.com/user-attachments/assets/6985b0a2-b52e-41a3-b866-88a054657af2" />
+<img width="667" height="435" alt="image" src="https://github.com/user-attachments/assets/65098200-90e5-4eac-9dfc-2ff76a6acab4" />
+
+<img width="977" height="522" alt="image" src="https://github.com/user-attachments/assets/877e6c76-76b6-49b2-bddb-dba41b210cd1" />
+# SQL JOIN, GROUP BY, HAVING & Aggregate Functions – Job Exam Notes
+
+## 1. Given Tables
+
+### Students
+
+| StudentId | StudentName |
+|---|---|
+| 1 | Mr. A |
+| 2 | Mr. B |
+| 3 | Mr. C |
+| 4 | Mr. D |
+
+### Marks
+
+| StudentId | Subject | Mark |
+|---|---|---:|
+| 1 | Math | 70 |
+| 2 | Math | 90 |
+| 3 | Math | 30 |
+| 1 | Bangali | 50 |
+| 2 | Bangali | 60 |
+| 3 | Bangali | 70 |
+| 1 | Physics | 80 |
+| 2 | Physics | 70 |
+| 3 | Physics | 60 |
+
+---
+
+## i) Count the Total Rows Using LEFT JOIN
+
+### SQL Query
+
+```sql
+SELECT COUNT(*)
+FROM Students S
+LEFT JOIN Marks M
+    ON S.StudentId = M.StudentId;
+```
+
+### Output
+
+| COUNT(*) |
+|---:|
+| 10 |
+
+### Explanation
+
+- Mr. A has 3 subjects.
+- Mr. B has 3 subjects.
+- Mr. C has 3 subjects.
+- Mr. D has no subject but is included because of LEFT JOIN.
+
+**Total = 3 + 3 + 3 + 1 = 10**
+
+**Important:** The original question appears to omit the `ON` condition. Without `ON` or `USING`, this LEFT JOIN syntax is invalid in standard SQL.
+
+---
+
+## ii) Find Students Whose Total Marks Are Greater Than or Equal to 200
+
+### SQL Query
+
+```sql
+SELECT S.StudentName
+FROM Students S
+JOIN Marks M
+    ON S.StudentId = M.StudentId
+GROUP BY S.StudentId, S.StudentName
+HAVING SUM(Mark) >= 200;
+```
+
+### Step 1: Calculate Total Marks
+
+| StudentName | Total Marks |
+|---|---:|
+| Mr. A | 200 |
+| Mr. B | 220 |
+| Mr. C | 160 |
+
+### Step 2: Apply HAVING Condition
+
+```sql
+HAVING SUM(Mark) >= 200;
+```
+
+### Output
+
+| StudentName |
+|---|
+| Mr. A |
+| Mr. B |
+
+**Explanation:**
+- `GROUP BY` groups marks student-wise.
+- `SUM()` calculates the total marks.
+- `HAVING` filters groups based on aggregate conditions.
+
+---
+
+## iii) List All Student Names and Number of Subjects They Have Completed
+
+### SQL Query
+
+```sql
+SELECT
+    S.StudentName,
+    COUNT(M.Subject) AS TotalSubjects
+FROM Students S
+LEFT JOIN Marks M
+    ON S.StudentId = M.StudentId
+GROUP BY S.StudentId, S.StudentName;
+```
+
+### Output
+
+| StudentName | TotalSubjects |
+|---|---:|
+| Mr. A | 3 |
+| Mr. B | 3 |
+| Mr. C | 3 |
+| Mr. D | 0 |
+
+### Explanation
+
+- `LEFT JOIN` includes all students.
+- `COUNT(M.Subject)` counts completed subjects.
+- `COUNT(column)` ignores NULL values.
+- Mr. D has no matching subject, so the count is 0.
+
+**Important Exam Trick:**
+
+Use `COUNT(M.Subject)` instead of `COUNT(*)` when counting matching records after a LEFT JOIN.
+
+---
+
+## iv) List All Students Who Have Not Completed Any Subject
+
+### Method 1: Using LEFT JOIN
+
+```sql
+SELECT S.StudentName
+FROM Students S
+LEFT JOIN Marks M
+    ON S.StudentId = M.StudentId
+WHERE M.StudentId IS NULL;
+```
+
+### Output
+
+| StudentName |
+|---|
+| Mr. D |
+
+### Explanation
+
+1. LEFT JOIN returns all students.
+2. Unmatched students get NULL in Marks columns.
+3. `IS NULL` identifies students without any matching subject.
+
+### Method 2: Using NOT EXISTS
+
+```sql
+SELECT S.StudentName
+FROM Students S
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM Marks M
+    WHERE M.StudentId = S.StudentId
+);
+```
+
+**Output:** Mr. D
+
+---
+
+## v) List All Subject Names
+
+### SQL Query
+
+```sql
+SELECT DISTINCT Subject
+FROM Marks;
+```
+
+### Output
+
+| Subject |
+|---|
+| Math |
+| Bangali |
+| Physics |
+
+### Explanation
+
+`DISTINCT` removes duplicate values and returns unique subject names.
+
+---
+
+## 2. Important SQL Concepts for Job Exams
+
+| SQL Concept | Purpose |
+|---|---|
+| `COUNT(*)` | Counts all rows |
+| `COUNT(column)` | Counts non-NULL values |
+| `SUM(column)` | Calculates total |
+| `AVG(column)` | Calculates average |
+| `MAX(column)` | Finds maximum value |
+| `MIN(column)` | Finds minimum value |
+| `GROUP BY` | Groups records |
+| `HAVING` | Filters grouped records |
+| `WHERE` | Filters individual rows |
+| `DISTINCT` | Removes duplicate values |
+| `IS NULL` | Checks NULL values |
+| `NOT EXISTS` | Finds records without matching records |
+| `LEFT JOIN` | Returns all left table records |
+
+---
+
+## 3. Important Job Exam Tricks
+
+### COUNT(*) vs COUNT(column)
+
+```sql
+SELECT COUNT(*) FROM Marks;
+```
+
+Counts all rows, including rows containing NULL values.
+
+```sql
+SELECT COUNT(Subject) FROM Marks;
+```
+
+Counts only non-NULL Subject values.
+
+### WHERE vs HAVING
+
+| WHERE | HAVING |
+|---|---|
+| Filters individual rows | Filters groups |
+| Applied before GROUP BY | Applied after GROUP BY |
+| Cannot directly use aggregate conditions | Can use aggregate functions |
+| Example: `WHERE Mark > 50` | Example: `HAVING SUM(Mark) >= 200` |
+
+### DISTINCT vs GROUP BY
+
+- `DISTINCT` removes duplicate values.
+- `GROUP BY` groups rows and is commonly used with aggregate functions.
+
+### LEFT JOIN + IS NULL
+
+Used to find records in the left table that have no matching records in the right table.
+
+```sql
+SELECT S.StudentName
+FROM Students S
+LEFT JOIN Marks M
+    ON S.StudentId = M.StudentId
+WHERE M.StudentId IS NULL;
+```
+
+---
+
+
+
+
 
 ![Uploading image.png…]()
 
