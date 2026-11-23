@@ -434,7 +434,9 @@ Here, T2 reads A only after T1 commits.
 
 ## 9. Strict Schedule
 
-A Strict Schedule does not allow another transaction to Read or Write a data item until the transaction that last wrote that item commits or aborts.
+Strict Schedule: A transaction cannot Read or Write data until the transaction that last wrote that data commits or aborts.
+
+সহজ বাংলা: কোনো Transaction data Write করলে, সেটি Commit বা Rollback না করা পর্যন্ত অন্য Transaction সেই data Read বা Write করতে পারবে না।
 
 **Example:**
 
