@@ -293,6 +293,9 @@ Non-Serial Schedule + Equivalent Serial Schedule = Serializable Schedule
 
 A schedule is Conflict Serializable if it can be transformed into a Serial Schedule by swapping non-conflicting operations.
 
+1. NO loop or cycle
+2. must be consistence .
+   
 <img width="990" height="541" alt="image" src="https://github.com/user-attachments/assets/ad30dfbb-4280-4216-abd7-51abe64850cb" />
 
 <img width="816" height="421" alt="image" src="https://github.com/user-attachments/assets/63d06b4c-0ab9-4558-81a3-6c32f94130a6" />
