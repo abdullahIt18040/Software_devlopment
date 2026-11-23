@@ -751,7 +751,468 @@ WHERE M.StudentId IS NULL;
 
 ---
 
+<img width="999" height="518" alt="image" src="https://github.com/user-attachments/assets/7ff8f7f7-c73c-401e-b0f5-7fadcf5abc0a" />
 
+
+# ON DELETE CASCADE – DBMS Job Exam Notes
+
+## 1. What is ON DELETE CASCADE?
+
+**Definition:** `ON DELETE CASCADE` is a referential integrity constraint. When a parent record is deleted, all related child records are automatically deleted.
+
+**In simple Bangla:**
+
+Parent table থেকে কোনো record delete করলে, তার সঙ্গে সম্পর্কিত Child table-এর record-গুলোও automatically delete হয়ে যায়।
+
+---
+
+## 2. Given Tables
+
+### Managers (Parent Table)
+
+| ManagerID (PK) | ManagerName |
+|---|---|
+| 101 | Rahim |
+| 102 | Karim |
+| 103 | Hasan |
+
+### Employees (Child Table)
+
+| EmployeeID (PK) | EmployeeName | ManagerID (FK) |
+|---|---|---|
+| 1 | Sakib | 101 |
+| 2 | Rakib | 101 |
+| 3 | Fahim | 102 |
+
+**Relationship:**
+
+- `Managers.ManagerID` → Primary Key (PK)
+- `Employees.ManagerID` → Foreign Key (FK)
+
+---
+
+## 3. SQL Implementation
+
+### Create Parent Table
+
+```sql
+CREATE TABLE Managers (
+    ManagerID INT PRIMARY KEY,
+    ManagerName VARCHAR(100)
+);
+```
+
+### Create Child Table with ON DELETE CASCADE
+
+```sql
+CREATE TABLE Employees (
+    EmployeeID INT PRIMARY KEY,
+    EmployeeName VARCHAR(100),
+    ManagerID INT,
+    FOREIGN KEY (ManagerID)
+        REFERENCES Managers(ManagerID)
+        ON DELETE CASCADE
+);
+```
+
+---
+
+## 4. What Happens When a Manager Is Deleted?
+
+### Delete Manager 101
+
+```sql
+DELETE FROM Managers
+WHERE ManagerID = 101;
+```
+
+Because of `ON DELETE CASCADE`, all employees associated with Manager 101 will automatically be deleted.
+
+### Employees Table After Deletion
+
+| EmployeeID | EmployeeName | ManagerID |
+|---|---|---|
+| 3 | Fahim | 102 |
+
+**Automatically deleted:**
+- Manager Rahim (101)
+- Employee Sakib (1)
+- Employee Rakib (2)
+
+**Fahim remains** because his manager (102) still exists.
+
+---
+
+## 5. Why Is ON DELETE CASCADE Dangerous in Banking Systems?
+
+In a real banking system, employee and manager information is important.
+
+Suppose:
+- One manager supervises 50 employees.
+- The manager has 50 associated employee records.
+- An administrator accidentally deletes the manager.
+
+With `ON DELETE CASCADE`, all 50 employee records will automatically be deleted.
+
+### Potential Problems
+
+1. Loss of employee records.
+2. Loss of important organizational information.
+3. Disruption of banking operations.
+4. Audit and compliance problems.
+5. Accidental deletion of important business data.
+
+---
+
+## 6. Best Practices to Prevent Accidental Data Loss
+
+### A. ON DELETE RESTRICT
+
+Prevents deleting a parent record while related child records exist.
+
+```sql
+FOREIGN KEY (ManagerID)
+REFERENCES Managers(ManagerID)
+ON DELETE RESTRICT;
+```
+
+### B. Soft Delete
+
+Instead of permanently deleting records, mark them as inactive.
+
+```sql
+UPDATE Managers
+SET Status = 'INACTIVE'
+WHERE ManagerID = 101;
+```
+
+**Benefit:** Records remain in the database for future reference.
+
+### C. Maintain Audit Logs
+
+Record:
+- Who deleted or modified the data.
+- When the operation happened.
+- Which records were affected.
+
+### D. Use Database Transactions
+
+Transactions help ensure controlled operations and allow rollback before committing changes.
+
+```sql
+BEGIN;
+
+DELETE FROM Managers
+WHERE ManagerID = 101;
+
+ROLLBACK;
+```
+
+`ROLLBACK` cancels the uncommitted deletion, including cascading deletions.
+
+---
+
+## 7. Comparison of ON DELETE Actions
+
+| Action | Behavior |
+|---|---|
+| CASCADE | Automatically deletes related child records |
+| RESTRICT | Prevents parent deletion if child records exist |
+| SET NULL | Sets the child foreign key to NULL |
+| NO ACTION | Rejects deletion if referential integrity would be violated |
+
+**Note:** RESTRICT and NO ACTION enforcement timing can vary by database.
+
+---
+
+# SQL ON DELETE Actions – DBMS Notes
+
+When a Foreign Key references a Primary Key in another table, `ON DELETE` defines what happens to related child records when a parent record is deleted.
+
+There are four important concepts:
+
+1. ON DELETE CASCADE
+2. ON DELETE RESTRICT
+3. ON DELETE SET NULL
+4. SOFT DELETE
+
+---
+
+## 1. ON DELETE CASCADE
+
+**Definition:** When a parent record is deleted, all related child records are automatically deleted.
+
+**Example:**
+
+Suppose we have two tables:
+
+**Managers (Parent Table)**
+
+| ManagerID (PK) | ManagerName |
+|---|---|
+| 101 | Rahim |
+| 102 | Karim |
+
+**Employees (Child Table)**
+
+| EmployeeID (PK) | EmployeeName | ManagerID (FK) |
+|---|---|---|
+| 1 | Sakib | 101 |
+| 2 | Rakib | 101 |
+| 3 | Fahim | 102 |
+
+### SQL Implementation
+
+```sql
+CREATE TABLE Employees (
+    EmployeeID INT PRIMARY KEY,
+    EmployeeName VARCHAR(100),
+    ManagerID INT,
+    FOREIGN KEY (ManagerID)
+        REFERENCES Managers(ManagerID)
+        ON DELETE CASCADE
+);
+```
+
+### Delete a Manager
+
+```sql
+DELETE FROM Managers
+WHERE ManagerID = 101;
+```
+
+### Result
+
+- Manager Rahim (101) will be deleted.
+- Employee Sakib (1) will automatically be deleted.
+- Employee Rakib (2) will automatically be deleted.
+- Employee Fahim (3) will remain.
+
+**Real-life Example:**
+If a customer account is permanently deleted, all dependent records configured with CASCADE, such as certain account-related child records, may also be deleted.
+
+**Advantages:**
+- Automatically maintains referential integrity.
+- Avoids manually deleting dependent records.
+- Useful when child records have no independent meaning.
+
+**Disadvantages:**
+- Accidental deletion of a parent can delete many child records.
+- May cause significant data loss.
+- Risky for important business and banking records.
+
+---
+
+## 2. ON DELETE RESTRICT
+
+**Definition:** Prevents deleting a parent record if related child records exist.
+
+**Example:**
+
+A manager has multiple employees. We should not delete the manager while employees are still assigned to that manager.
+
+### SQL Implementation
+
+```sql
+CREATE TABLE Employees (
+    EmployeeID INT PRIMARY KEY,
+    EmployeeName VARCHAR(100),
+    ManagerID INT,
+    FOREIGN KEY (ManagerID)
+        REFERENCES Managers(ManagerID)
+        ON DELETE RESTRICT
+);
+```
+
+### Try to Delete a Manager
+
+```sql
+DELETE FROM Managers
+WHERE ManagerID = 101;
+```
+
+**Result:** The DELETE operation will fail because employees are still associated with Manager 101.
+
+### How to Delete Successfully?
+
+First, reassign the employees to another manager.
+
+```sql
+UPDATE Employees
+SET ManagerID = 102
+WHERE ManagerID = 101;
+```
+
+Then delete the old manager.
+
+```sql
+DELETE FROM Managers
+WHERE ManagerID = 101;
+```
+
+**Real-life Example:**
+In a banking system, a manager should not be permanently deleted while employees are still assigned to that manager.
+
+**Advantages:**
+- Prevents accidental deletion of parent records.
+- Protects related business data.
+- Maintains referential integrity.
+
+**Disadvantages:**
+- Requires handling dependent records before deletion.
+- May require additional UPDATE or DELETE operations.
+
+---
+
+## 3. ON DELETE SET NULL
+
+**Definition:** When a parent record is deleted, the foreign key values of related child records are automatically set to NULL instead of deleting the child records.
+
+**Example:**
+
+Suppose Manager Rahim manages two employees.
+
+### SQL Implementation
+
+```sql
+CREATE TABLE Employees (
+    EmployeeID INT PRIMARY KEY,
+    EmployeeName VARCHAR(100),
+    ManagerID INT NULL,
+    FOREIGN KEY (ManagerID)
+        REFERENCES Managers(ManagerID)
+        ON DELETE SET NULL
+);
+```
+
+**Important:** The foreign key column must allow NULL values.
+
+### Delete a Manager
+
+```sql
+DELETE FROM Managers
+WHERE ManagerID = 101;
+```
+
+### Employees Table After Deletion
+
+| EmployeeID | EmployeeName | ManagerID |
+|---|---|---|
+| 1 | Sakib | NULL |
+| 2 | Rakib | NULL |
+| 3 | Fahim | 102 |
+
+**What happened?**
+
+- Manager Rahim was deleted.
+- Sakib and Rakib were not deleted.
+- Their ManagerID values became NULL.
+- Fahim remains assigned to Manager 102.
+
+**Real-life Example:**
+If a manager leaves an organization, employees may remain in the system but temporarily have no assigned manager.
+
+**Advantages:**
+- Preserves child records.
+- Avoids deleting important information.
+- Removes invalid foreign key references.
+
+**Disadvantages:**
+- Child records may become temporarily unassigned.
+- Applications must handle NULL values properly.
+
+---
+
+## 4. SOFT DELETE
+
+**Definition:** Soft Delete means marking a record as inactive or deleted without permanently removing it from the database.
+
+Unlike CASCADE, RESTRICT and SET NULL, Soft Delete is an application/database design approach, not a Foreign Key ON DELETE action.
+
+**Example:**
+
+Suppose we have a Managers table with an additional Status column.
+
+### Managers Table
+
+| ManagerID | ManagerName | Status |
+|---|---|---|
+| 101 | Rahim | ACTIVE |
+| 102 | Karim | ACTIVE |
+
+### SQL Implementation
+
+```sql
+ALTER TABLE Managers
+ADD Status VARCHAR(20) DEFAULT 'ACTIVE';
+```
+
+### Perform Soft Delete
+
+```sql
+UPDATE Managers
+SET Status = 'INACTIVE'
+WHERE ManagerID = 101;
+```
+
+### Result
+
+| ManagerID | ManagerName | Status |
+|---|---|---|
+| 101 | Rahim | INACTIVE |
+| 102 | Karim | ACTIVE |
+
+**What happened?**
+
+- The manager record was not physically deleted.
+- The manager was marked as INACTIVE.
+- The record remains available in the database.
+- Related employee records remain unchanged.
+
+### Retrieve Only Active Managers
+
+```sql
+SELECT *
+FROM Managers
+WHERE Status = 'ACTIVE';
+```
+
+### Restore a Soft-Deleted Manager
+
+```sql
+UPDATE Managers
+SET Status = 'ACTIVE'
+WHERE ManagerID = 101;
+```
+
+**Real-life Example:**
+Banking systems often need to retain historical records for audit, compliance and reporting. Soft Delete helps preserve those records.
+
+**Advantages:**
+- Prevents permanent data loss.
+- Supports audit and historical reporting.
+- Allows records to be restored.
+- Useful for business applications.
+
+**Disadvantages:**
+- Requires filtering inactive records in queries.
+- Increases database storage.
+- Requires proper handling of deleted records in applications.
+
+---
+
+## 5. Comparison of ON DELETE Actions
+
+| Feature | CASCADE | RESTRICT | SET NULL | SOFT DELETE |
+|---|---|---|---|---|
+| Parent record | Deleted | Deletion blocked if children exist | Deleted | Marked inactive |
+| Child record | Deleted | Unchanged | Preserved | Unchanged |
+| Foreign key | Child row removed | Unchanged | Set to NULL | Unchanged |
+| Permanent deletion | Yes | No, if blocked | Parent only | No |
+| Requires nullable FK | No | No | Yes | No |
+| Data preservation | Low | High | High | High |
+
+---
 
 
 
