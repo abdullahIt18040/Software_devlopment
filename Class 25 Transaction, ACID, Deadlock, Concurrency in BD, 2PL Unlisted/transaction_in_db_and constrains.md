@@ -220,3 +220,278 @@ There are **6 transaction states** in DBMS.
 
 ---
 
+<img width="706" height="415" alt="image" src="https://github.com/user-attachments/assets/ebd197d1-bbaa-4f90-bc42-0985f66564e0" />
+
+# Types of Schedules in DBMS
+
+## 1. What is a Schedule?
+
+A **Schedule** is the sequence or order in which operations of multiple transactions are executed in a database.
+
+In simple words, a schedule determines the execution order of Read and Write operations of multiple transactions.
+
+## 2. Types of Schedules
+
+There are two main types of schedules:
+
+1. Serial Schedule
+2. Non-Serial Schedule
+
+### A. Serial Schedule
+
+When one transaction completes entirely before another transaction starts, it is called a Serial Schedule.
+
+**Example:**
+
+```text
+T1: Read(A)
+T1: Write(A)
+T1: Commit
+
+T2: Read(B)
+T2: Write(B)
+T2: Commit
+```
+
+**Key Point:**
+- One transaction executes at a time.
+- No interleaving of transaction operations.
+- Always Serializable.
+
+### B. Non-Serial Schedule
+
+When operations of multiple transactions are interleaved, it is called a Non-Serial Schedule.
+
+**Example:**
+
+```text
+T1: Read(A)
+T2: Read(B)
+T1: Write(A)
+T2: Write(B)
+T1: Commit
+T2: Commit
+```
+
+**Key Point:**
+- Multiple transactions execute in an interleaved order.
+- May be Serializable or Non-Serializable.
+
+---
+
+## 3. Serializable Schedule
+
+A Non-Serial Schedule is called Serializable if its result is equivalent to some Serial Schedule.
+
+There are two types:
+
+### A. Conflict Serializable
+
+A schedule is Conflict Serializable if it can be transformed into a Serial Schedule by swapping non-conflicting operations.
+
+**Conflict Operations:**
+
+Two operations conflict if:
+1. They belong to different transactions.
+2. They operate on the same data item.
+3. At least one operation is a Write operation.
+
+**Types of Conflicting Operations:**
+
+| Operation 1 | Operation 2 | Conflict? |
+|---|---|---|
+| Read(A) | Read(A) | No |
+| Read(A) | Write(A) | Yes |
+| Write(A) | Read(A) | Yes |
+| Write(A) | Write(A) | Yes |
+
+### B. View Serializable
+
+A schedule is View Serializable if it is view-equivalent to a Serial Schedule.
+
+Three conditions must be satisfied:
+
+1. Initial Read: Both schedules read the initial value of a data item.
+2. Read-from Relationship: Both schedules read data written by the same transaction.
+3. Final Write: Both schedules have the same final writer for each data item.
+
+**Key Point:** Every Conflict Serializable Schedule is View Serializable, but every View Serializable Schedule is not necessarily Conflict Serializable.
+
+---
+
+## 4. Non-Serializable Schedule
+
+A schedule is Non-Serializable if it is not equivalent to any Serial Schedule.
+
+**Key Point:**
+- Its result cannot be represented by an equivalent Serial Schedule.
+- May produce inconsistent results.
+
+---
+
+## 5. Recoverable Schedule
+
+A schedule is Recoverable if a transaction reads data written by another transaction, the writer must commit before the reader commits.
+
+**Example:**
+
+```text
+T1: Write(A)
+T2: Read(A)
+T1: Commit
+T2: Commit
+```
+
+Here, T2 reads data written by T1. T1 commits before T2.
+
+**Key Point:** The writer transaction must commit before the reader transaction commits.
+
+## 6. Non-Recoverable Schedule
+
+A schedule is Non-Recoverable if a transaction commits after reading uncommitted data from another transaction, but before the writer commits.
+
+**Example:**
+
+```text
+T1: Write(A)
+T2: Read(A)
+T2: Commit
+T1: Rollback
+```
+
+Here, T2 commits before T1. Later, T1 rolls back.
+
+**Problem:** T2 has already committed using invalid data.
+
+---
+
+## 7. Cascading Schedule
+
+A Cascading Schedule allows a transaction to read uncommitted data written by another transaction.
+
+If the first transaction rolls back, dependent transactions may also need to roll back.
+
+This is called **Cascading Rollback**.
+
+**Example:**
+
+```text
+T1: Write(A)
+T2: Read(A)
+T3: Read(A)
+
+T1: Rollback
+T2: Rollback
+T3: Rollback
+```
+
+**Key Point:** One transaction's rollback can cause multiple dependent transactions to roll back.
+
+## 8. Cascadeless Schedule
+
+A Cascadeless Schedule does not allow a transaction to read uncommitted data written by another transaction.
+
+**Example:**
+
+```text
+T1: Write(A)
+T1: Commit
+
+T2: Read(A)
+T2: Commit
+```
+
+Here, T2 reads A only after T1 commits.
+
+**Key Point:**
+- No dirty reads.
+- Prevents Cascading Rollback.
+
+## 9. Strict Schedule
+
+A Strict Schedule does not allow another transaction to Read or Write a data item until the transaction that last wrote that item commits or aborts.
+
+**Example:**
+
+```text
+T1: Write(A)
+T1: Commit
+
+T2: Read(A)
+T2: Write(A)
+T2: Commit
+```
+
+Here, T2 cannot Read or Write A before T1 finishes.
+
+**Key Point:**
+- No dirty reads.
+- No dirty writes.
+- Prevents Cascading Rollback.
+- Easier database recovery.
+
+---
+
+## 10. Comparison of Schedules
+
+| Schedule | Main Concept |
+|---|---|
+| Serial | One transaction completes before another starts |
+| Non-Serial | Transaction operations are interleaved |
+| Conflict Serializable | Can be converted into Serial by swapping non-conflicting operations |
+| View Serializable | View-equivalent to a Serial Schedule |
+| Non-Serializable | Not equivalent to any Serial Schedule |
+| Recoverable | Writer commits before reader commits |
+| Non-Recoverable | Reader commits before writer commits |
+| Cascading | Rollback may affect dependent transactions |
+| Cascadeless | Does not read uncommitted data |
+| Strict | Does not read or write uncommitted data items |
+
+---
+
+## 11. Important Relationships for Job Exams
+
+### Recoverability Relationship
+
+```text
+Strict Schedule
+       |
+       v
+Cascadeless Schedule
+       |
+       v
+Recoverable Schedule
+```
+
+**Remember:**
+
+- Every Strict Schedule is Cascadeless.
+- Every Cascadeless Schedule is Recoverable.
+- Every Recoverable Schedule is not necessarily Cascadeless.
+- Every Conflict Serializable Schedule is View Serializable.
+- Every View Serializable Schedule is not necessarily Conflict Serializable.
+- Every Serial Schedule is Serializable.
+- Every Non-Serial Schedule is not necessarily Non-Serializable.
+
+---
+
+## 12. Important Terms
+
+| Term | Meaning |
+|---|---|
+| Interleaving | Mixing operations of multiple transactions |
+| Dirty Read | Reading uncommitted data |
+| Dirty Write | Overwriting uncommitted data |
+| Rollback | Undoing transaction changes |
+| Commit | Permanently saving transaction changes |
+| Serializability | Ensuring a schedule is equivalent to a Serial Schedule |
+
+**Final Exam Tip:**
+
+- Serial = One by one.
+- Non-Serial = Interleaved.
+- Serializable = Equivalent to Serial.
+- Recoverable = Writer commits first.
+- Cascadeless = No dirty read.
+- Strict = No dirty read or dirty write.
+
