@@ -329,11 +329,17 @@ A schedule is View Serializable if it is view-equivalent to a Serial Schedule.
 <img width="927" height="492" alt="image" src="https://github.com/user-attachments/assets/b8a1034a-e637-4692-b62d-d1a2beeb36b5" />
 <img width="812" height="558" alt="image" src="https://github.com/user-attachments/assets/763a9158-cc0f-4fb7-99f0-64b23d192a05" />
 
+make all posible combination : 
 Three conditions must be satisfied:
 
 1. Initial Read: Both schedules read the initial value of a data item.
 2. Read-from Relationship: Both schedules read data written by the same transaction.
 3. Final Write: Both schedules have the same final writer for each data item.
+
+<img width="1124" height="611" alt="image" src="https://github.com/user-attachments/assets/dbab7d49-34be-4105-8fdc-413f116f9188" />
+
+non serial schedule convert into serial schedule.
+<img width="1104" height="764" alt="image" src="https://github.com/user-attachments/assets/767ba894-5d7f-4119-b050-c98a529bec25" />
 
 **Key Point:** Every Conflict Serializable Schedule is View Serializable, but every View Serializable Schedule is not necessarily Conflict Serializable.
 
@@ -368,8 +374,7 @@ Here, T2 reads data written by T1. T1 commits before T2.
 
 ## 6. Non-Recoverable Schedule
 
-A schedule is Non-Recoverable if a transaction commits after reading uncommitted data from another transaction, but before the writer commits.
-
+A schedule is Non-Recoverable if The writer transaction  commit after the reader transaction commits.
 **Example:**
 
 ```text
