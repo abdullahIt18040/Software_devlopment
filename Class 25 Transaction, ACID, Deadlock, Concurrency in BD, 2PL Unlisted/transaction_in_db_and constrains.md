@@ -173,26 +173,50 @@ If an error occurs before committing:
 ROLLBACK;
 ```
 
-## 8. Important Points for Job Exams
+<img width="496" height="268" alt="image" src="https://github.com/user-attachments/assets/56c1a912-5623-47e0-8a4c-7fdabde0d132" />
 
-- ACID ensures reliable database transactions.
-- Atomicity = All or Nothing.
-- Consistency = Valid database state.
-- Isolation = Independent execution of concurrent transactions.
-- Durability = Permanent committed data.
-- COMMIT is related to Durability.
-- ROLLBACK is related to Atomicity.
-- Isolation helps prevent concurrency problems.
-- Consistency maintains database constraints and integrity.
+# Transaction States in DBMS
 
-## 9. Easy Way to Remember
+## Definition
+A **Transaction State** represents the current status of a transaction during its execution in a database.
 
-**A – Atomicity:** All or Nothing.
+## 1. Types of Transaction States
 
-**C – Consistency:** Correct Database State.
+There are **6 transaction states** in DBMS.
 
-**I – Isolation:** Independent Transactions.
+### 1. Active State
+- The transaction is currently executing.
+- Read and Write operations are performed.
 
-**D – Durability:** Data is Permanent.
+**Example:** Reading the sender's account balance.
 
-**Exam Tip:** ACID is one of the most important concepts in DBMS and is frequently asked in IT job examinations.
+### 2. Partially Committed State
+- The last statement of the transaction has been executed.
+- Changes are waiting to be permanently stored.
+
+**Example:** All SQL statements have executed, but permanent storage is not yet confirmed.
+
+### 3. Committed State
+- The transaction has successfully completed.
+- All changes are permanently stored in the database.
+
+**Example:** Money is successfully transferred from Account A to Account B.
+
+### 4. Failed State
+- The transaction cannot continue due to an error or system failure.
+
+**Example:** A database crash or constraint violation occurs.
+
+### 5. Aborted State
+- The transaction is rolled back.
+- All changes made by the transaction are undone.
+
+**Example:** Deducted money is restored to Account A using ROLLBACK.
+
+### 6. Terminated State
+- The transaction finishes its execution.
+- It leaves the transaction processing system.
+- It can be reached after either a committed or aborted state.
+
+---
+
