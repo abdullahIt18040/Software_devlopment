@@ -241,6 +241,8 @@ There are two main types of schedules:
 
 When one transaction completes entirely before another transaction starts, it is called a Serial Schedule.
 
+<img width="875" height="456" alt="image" src="https://github.com/user-attachments/assets/188b00bb-e6a1-43a0-bcbb-4bdc5619058e" />
+
 **Example:**
 
 ```text
@@ -260,7 +262,9 @@ T2: Commit
 
 ### B. Non-Serial Schedule
 
-When operations of multiple transactions are interleaved, it is called a Non-Serial Schedule.
+When operations of multiple transactions are executed simultaneously in a mixed order, it is called a Non-Serial Schedule.
+<img width="853" height="414" alt="image" src="https://github.com/user-attachments/assets/f7c5e8e2-232f-4d13-bc66-39523dfdaa70" />
+
 
 **Example:**
 
@@ -281,13 +285,23 @@ T2: Commit
 
 ## 3. Serializable Schedule
 
-A Non-Serial Schedule is called Serializable if its result is equivalent to some Serial Schedule.
-
+A Non-Serial Schedule that can be converted into an equivalent Serial Schedule is called a Serializable Schedule.
 There are two types:
+Non-Serial Schedule + Equivalent Serial Schedule = Serializable Schedule
 
 ### A. Conflict Serializable
 
 A schedule is Conflict Serializable if it can be transformed into a Serial Schedule by swapping non-conflicting operations.
+
+<img width="990" height="541" alt="image" src="https://github.com/user-attachments/assets/ad30dfbb-4280-4216-abd7-51abe64850cb" />
+
+<img width="816" height="421" alt="image" src="https://github.com/user-attachments/assets/63d06b4c-0ab9-4558-81a3-6c32f94130a6" />
+
+je node er incoming edge nai sai edge age execute hobe.
+
+convert non serial schedule to serial sedule ;
+<img width="935" height="623" alt="image" src="https://github.com/user-attachments/assets/e7dcd483-5ba3-4e01-98e6-9c6be2c577fd" />
+
 
 **Conflict Operations:**
 
@@ -308,6 +322,8 @@ Two operations conflict if:
 ### B. View Serializable
 
 A schedule is View Serializable if it is view-equivalent to a Serial Schedule.
+
+<img width="927" height="492" alt="image" src="https://github.com/user-attachments/assets/b8a1034a-e637-4692-b62d-d1a2beeb36b5" />
 
 Three conditions must be satisfied:
 
