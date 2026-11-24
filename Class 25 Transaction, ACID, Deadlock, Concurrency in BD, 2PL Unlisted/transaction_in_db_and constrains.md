@@ -305,6 +305,7 @@ je node er incoming edge nai sai edge age execute hobe.
 convert non serial schedule to serial sedule ;
 <img width="935" height="623" alt="image" src="https://github.com/user-attachments/assets/e7dcd483-5ba3-4e01-98e6-9c6be2c577fd" />
 
+<img width="933" height="423" alt="image" src="https://github.com/user-attachments/assets/96662d07-adc9-4ee6-83c3-9bde30dd37c2" />
 
 **Conflict Operations:**
 
