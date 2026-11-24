@@ -534,3 +534,5 @@ Recoverable Schedule
 - Cascadeless = No dirty read.
 - Strict = No dirty read or dirty write.
 
+<img width="728" height="484" alt="image" src="https://github.com/user-attachments/assets/28a93f2e-1edb-44d6-a69d-33f56842d338" />
+
