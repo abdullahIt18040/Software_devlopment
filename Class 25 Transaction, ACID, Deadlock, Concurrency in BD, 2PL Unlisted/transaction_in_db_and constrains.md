@@ -308,6 +308,8 @@ convert non serial schedule to serial sedule ;
 
 **Conflict Operations:**
 
+<img width="479" height="217" alt="image" src="https://github.com/user-attachments/assets/467a865c-89e6-49b2-9e0b-13f398d29951" />
+
 Two operations conflict if:
 1. They belong to different transactions.
 2. They operate on the same data item.
