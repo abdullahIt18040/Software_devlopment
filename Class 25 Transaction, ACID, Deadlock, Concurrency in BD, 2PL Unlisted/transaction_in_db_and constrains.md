@@ -306,6 +306,15 @@ convert non serial schedule to serial sedule ;
 <img width="935" height="623" alt="image" src="https://github.com/user-attachments/assets/e7dcd483-5ba3-4e01-98e6-9c6be2c577fd" />
 
 <img width="933" height="423" alt="image" src="https://github.com/user-attachments/assets/96662d07-adc9-4ee6-83c3-9bde30dd37c2" />
+<img width="765" height="489" alt="image" src="https://github.com/user-attachments/assets/335c862c-d55d-4f6d-8174-36a3d4192048" />
+<img width="713" height="205" alt="image" src="https://github.com/user-attachments/assets/33785940-f7f3-4d1d-9b95-01443fc56260" />
+
+serial diya thakle tavle e sagiye likbo then solve korbo
+ <img width="896" height="465" alt="image" src="https://github.com/user-attachments/assets/f66e9fd0-6db2-4dbc-9fea-aa3f6ccc6f5f" />
+<img width="722" height="765" alt="image" src="https://github.com/user-attachments/assets/6c3ec917-b94d-41be-8b89-a908006d2055" />
+<img width="739" height="303" alt="image" src="https://github.com/user-attachments/assets/e0c803d8-253f-4f45-a53c-5203fb255d7d" />
+
+
 
 **Conflict Operations:**
 
