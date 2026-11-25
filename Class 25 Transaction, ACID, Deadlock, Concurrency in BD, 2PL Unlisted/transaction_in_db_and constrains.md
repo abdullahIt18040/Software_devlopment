@@ -630,6 +630,46 @@ Prevent deadlock before it happens by eliminating at least one of the four neces
 
 Example: Prevent Hold and Wait by requiring a transaction to request all required resources before execution.
 
+Wait-Die Scheme in DBMS
+Wait-Die Scheme হলো একটি Deadlock Prevention Technique, যা Timestamp-based protocol ব্যবহার করে Deadlock প্রতিরোধ করে।
+
+এখানে Transaction-এর বয়স (Timestamp) অনুযায়ী সিদ্ধান্ত নেওয়া হয় কোন Transaction অপেক্ষা করবে এবং কোন Transaction abort হবে।
+1. Basic Concept
+- Older Transaction: যে Transaction আগে শুরু হয়েছে (smaller timestamp)।
+- Younger Transaction: যে Transaction পরে শুরু হয়েছে (larger timestamp)।
+Wait-Die Scheme-এর নিয়ম:
+1. Older Transaction যদি Younger Transaction-এর Resource চায় → Wait করবে।
+2. Younger Transaction যদি Older Transaction-এর Resource চায় → Die (Abort) হবে।
+Wait-Die Rules
+Wait
+Older → Younger
+
+Older Transaction অপেক্ষা করবে।
+
+Die (Abort)
+Younger → Older
+
+Younger Transaction abort হবে।
+
+
+2. Example
+ধরি:
+- T1 → Timestamp = 5 (Older)
+- T2 → Timestamp = 10 (Younger)
+এখন দুটি পরিস্থিতি দেখি।
+
+Case 1: T1 requests a resource held by T2
+- T1 is Older.
+- T2 is Younger.
+- T1 will Wait.
+Result: T1 → Wait
+
+Case 2: T2 requests a resource held by T1
+- T2 is Younger.
+- T1 is Older.
+- T2 will Die (Abort).
+Result: T2 → Abort
+
 ### 2. Deadlock Avoidance
 Transaction execute করার আগে check করা হয় Deadlock হওয়ার সম্ভাবনা আছে কি না।
 Before allocating resources, check whether the allocation keeps the system in a safe state.
