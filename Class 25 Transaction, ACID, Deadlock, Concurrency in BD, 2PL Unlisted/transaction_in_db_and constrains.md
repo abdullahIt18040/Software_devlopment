@@ -814,7 +814,7 @@ Concurrency Control না থাকলে ভুলভাবে Data Update হ
 
 এর ফলে বিভিন্ন সমস্যা তৈরি হয়:
 2. Problems of Concurrent Execution
-1. Lost Update Problem
+### 1. Lost Update Problem
 যখন দুটি Transaction একই Data Update করে এবং একটি Transaction-এর Update অন্যটি overwrite করে দেয়।
 
 Example:
@@ -836,12 +836,9 @@ Actual Balance = 7,000 টাকা।
 ### 2. Dirty Read Problem
 একটি Transaction অন্য একটি Uncommitted Transaction-এর Updated Data Read করলে তাকে Dirty Read বলে।
 
-Example:
-- T1 updates balance from 5000 to 4000.
-- T2 reads 4000.
-- T1 performs ROLLBACK.
-- T2 has already read invalid data.
-3. Non-Repeatable Read
+<img width="1019" height="428" alt="image" src="https://github.com/user-attachments/assets/215f21eb-a34b-4b71-8c93-760f17123b36" />
+
+### 3. Non-Repeatable Read
 একই Transaction-এ একই Data দুইবার Read করলে ভিন্ন Value পাওয়া গেলে তাকে Non-Repeatable Read বলে।
 4. Phantom Read
 একই Query এক Transaction-এর মধ্যে একাধিকবার Execute করলে নতুন কিছু Row দেখা গেলে তাকে Phantom Read বলে।
