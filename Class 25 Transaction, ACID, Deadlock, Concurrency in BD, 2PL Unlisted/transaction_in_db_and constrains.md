@@ -794,4 +794,123 @@ Example:
 এখানে দুটি কাজের সময় ১০:১৫ থেকে ১০:৩০ পর্যন্ত একসাথে চলছে।
 
 এটাই Overlapping Time Periods।
+
+```
+
+gg
+```
+Concurrency Control in DBMS
+Concurrency Control is a mechanism in Database Management Systems (DBMS) that manages the simultaneous execution of multiple transactions without causing data inconsistency.
+
+বাংলায়: যখন একাধিক Transaction একই সময়ে Database-এর Data Access বা Modify করে, তখন Data Consistency বজায় রাখার জন্য যে পদ্ধতি ব্যবহার করা হয় তাকে Concurrency Control বলে।
+1. Why Concurrency Control is Needed?
+ধরুন, একটি Bank Account-এ 5,000 টাকা আছে।
+
+একই সময়ে দুটি Transaction কাজ করছে:
+- T1: 1,000 টাকা Withdraw করবে।
+- T2: 2,000 টাকা Deposit করবে।
+Concurrency Control না থাকলে ভুলভাবে Data Update হতে পারে।
+
+এর ফলে বিভিন্ন সমস্যা তৈরি হয়:
+2. Problems of Concurrent Execution
+1. Lost Update Problem
+যখন দুটি Transaction একই Data Update করে এবং একটি Transaction-এর Update অন্যটি overwrite করে দেয়।
+
+Example:
+Step	Transaction T1	Transaction T2	Balance
+1	Read(5000)		5000
+2		Read(5000)	5000
+3	Withdraw 1000		4000
+4		Deposit 2000	7000
+5	Write(4000)		4000
+6		Write(7000)	7000
+
+Expected Balance = 6,000 টাকা।
+
+Actual Balance = 7,000 টাকা।
+
+এখানে T1-এর Update হারিয়ে গেছে।
+2. Dirty Read Problem
+একটি Transaction অন্য একটি Uncommitted Transaction-এর Updated Data Read করলে তাকে Dirty Read বলে।
+
+Example:
+- T1 updates balance from 5000 to 4000.
+- T2 reads 4000.
+- T1 performs ROLLBACK.
+- T2 has already read invalid data.
+3. Non-Repeatable Read
+একই Transaction-এ একই Data দুইবার Read করলে ভিন্ন Value পাওয়া গেলে তাকে Non-Repeatable Read বলে।
+4. Phantom Read
+একই Query এক Transaction-এর মধ্যে একাধিকবার Execute করলে নতুন কিছু Row দেখা গেলে তাকে Phantom Read বলে।
+
+3. Techniques of Concurrency Control
+Concurrency Control-এর প্রধান Techniques:
+Concurrency Control
+1. Lock-Based Protocol
+
+Shared Lock, Exclusive Lock, Two-Phase Locking (2PL)
+
+2. Timestamp-Based Protocol
+
+Timestamp Ordering
+
+3. Validation-Based Protocol
+
+Optimistic Concurrency Control
+
+4. Multiversion Concurrency Control (MVCC)
+
+Maintains multiple versions of data
+
+
+1. Lock-Based Protocol
+Lock ব্যবহার করে Database Data Access নিয়ন্ত্রণ করা হয়।
+
+There are two types of locks:
+Lock	Meaning
+Shared Lock (S)	Read operation
+Exclusive Lock (X)	Write operation
+
+Shared Lock: Multiple transactions can read the same data simultaneously.
+
+Exclusive Lock: Only one transaction can hold the exclusive lock on a data item.
+2. Two-Phase Locking (2PL)
+Two-Phase Locking ensures conflict serializability.
+
+It has two phases:
+1. Growing Phase: Transaction can acquire locks but cannot release locks.
+2. Shrinking Phase: Transaction can release locks but cannot acquire new locks.
+
+   
+   ```
+   <img width="741" height="441" alt="image" src="https://github.com/user-attachments/assets/63124566-286b-4e4b-b4f3-88f24531293f" />
+
+```
+Types of 2PL:
+- Basic 2PL
+- Conservative (Static) 2PL
+- Strict 2PL
+- Rigorous 2PL
+3. Timestamp-Based Protocol
+প্রতিটি Transaction-কে একটি Unique Timestamp দেওয়া হয়।
+- Older Transaction = Smaller Timestamp
+- Younger Transaction = Larger Timestamp
+Database operations Timestamp অনুযায়ী execute হয়।
+4. Validation-Based Protocol
+একে Optimistic Concurrency Control-ও বলা হয়।
+
+এখানে Transaction তিনটি Phase অনুসরণ করে:
+1. Read Phase
+2. Validation Phase
+3. Write Phase
+এটি ধরে নেয় যে Transaction-এর মধ্যে Conflict হওয়ার সম্ভাবনা কম।
+5. Multiversion Concurrency Control (MVCC)
+একই Data-এর একাধিক Version সংরক্ষণ করা হয়।
+
+এর ফলে:
+- Readers সাধারণত Writers-কে block করে না।
+- Writers সাধারণত Readers-কে block করে না।
+- Database-এর concurrent access সহজ হয়।
+PostgreSQL এবং Oracle-এর মতো Database-এ MVCC-based concurrency mechanisms রয়েছে।
+
 ```
