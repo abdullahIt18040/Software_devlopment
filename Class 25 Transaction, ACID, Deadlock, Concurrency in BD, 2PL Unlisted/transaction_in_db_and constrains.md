@@ -780,3 +780,18 @@ Here:
 
 <img width="573" height="220" alt="image" src="https://github.com/user-attachments/assets/26ff3fad-d557-42db-b235-7c26689cb49d" />
 
+- Concurrency = Multiple transactions execute in overlapping time periods.
+- Concurrency Control = Managing concurrent transactions to maintain data consistency.
+
+  ```
+  Overlapping Time Periods অর্থ হলো সময়ের মধ্যে একটির সাথে অন্যটির মিল থাকা বা সময়ের কিছু অংশ একসাথে চলা।
+
+সহজভাবে: একটি কাজ শেষ হওয়ার আগেই অন্য একটি কাজ শুরু হলে, তাদের সময়ের মধ্যে Overlap থাকে।
+
+Example:
+- Task A: সকাল ১০:০০ – ১০:৩০
+- Task B: সকাল ১০:১৫ – ১০:৪৫
+এখানে দুটি কাজের সময় ১০:১৫ থেকে ১০:৩০ পর্যন্ত একসাথে চলছে।
+
+এটাই Overlapping Time Periods।
+```
