@@ -881,9 +881,9 @@ It has two phases:
 1. Growing Phase: Transaction can acquire locks but cannot release locks.
 2. Shrinking Phase: Transaction can release locks but cannot acquire new locks.
 
+   <img width="741" height="441" alt="image" src="https://github.com/user-attachments/assets/63124566-286b-4e4b-b4f3-88f24531293f" />
    
    ```
-   <img width="741" height="441" alt="image" src="https://github.com/user-attachments/assets/63124566-286b-4e4b-b4f3-88f24531293f" />
 
 ```
 Types of 2PL:
