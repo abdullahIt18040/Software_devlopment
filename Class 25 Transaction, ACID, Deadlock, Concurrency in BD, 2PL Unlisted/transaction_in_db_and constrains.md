@@ -535,4 +535,169 @@ Recoverable Schedule
 - Strict = No dirty read or dirty write.
 
 <img width="728" height="484" alt="image" src="https://github.com/user-attachments/assets/28a93f2e-1edb-44d6-a69d-33f56842d338" />
+# Deadlock in DBMS
+
+## 1. What is Deadlock?
+
+A **Deadlock** is a situation in a Database Management System (DBMS) where two or more transactions wait indefinitely for resources locked by each other.
+
+As a result, none of the transactions can proceed.
+
+**In simple words:** When two or more transactions wait for each other to release resources, this situation is called Deadlock.
+
+---
+
+## 2. Deadlock Example
+
+Suppose we have two resources:
+
+- Resource A
+- Resource B
+
+And two transactions: T1 and T2.
+
+### Transaction T1
+
+```sql
+LOCK(A);
+LOCK(B);
+```
+
+### Transaction T2
+
+```sql
+LOCK(B);
+LOCK(A);
+```
+
+### Execution Scenario
+
+| Transaction T1 | Transaction T2 |
+|---|---|
+| Locks Resource A | |
+| | Locks Resource B |
+| Waits for Resource B | |
+| | Waits for Resource A |
+
+**Result:**
+
+- T1 holds Resource A and waits for Resource B.
+- T2 holds Resource B and waits for Resource A.
+- Neither transaction can proceed.
+
+This situation is called **Deadlock**.
+
+---
+
+## 3. Four Necessary Conditions of Deadlock
+
+Deadlock occurs when all four conditions exist simultaneously.
+
+### 1. Mutual Exclusion
+
+A resource can be used by only one transaction at a time.
+
+### 2. Hold and Wait
+
+A transaction holds one resource while waiting for another resource.
+
+### 3. No Preemption
+
+A resource cannot be forcibly taken away from a transaction. It must be released voluntarily.
+
+### 4. Circular Wait
+
+Two or more transactions wait for resources in a circular chain.
+
+**Remember: M-H-N-C**
+
+- M = Mutual Exclusion
+- H = Hold and Wait
+- N = No Preemption
+- C = Circular Wait
+
+---
+
+## 4. Deadlock Handling Techniques
+
+There are four major techniques for handling deadlocks.
+
+### 1. Deadlock Prevention
+
+Prevent deadlock before it happens by eliminating at least one of the four necessary conditions.
+
+Example: Prevent Hold and Wait by requiring a transaction to request all required resources before execution.
+
+### 2. Deadlock Avoidance
+
+Before allocating resources, check whether the allocation keeps the system in a safe state.
+
+**Example:** Banker's Algorithm.
+
+### 3. Deadlock Detection
+
+Allow deadlocks to occur and periodically check whether a deadlock exists.
+
+**Example:** Wait-for Graph.
+
+If a cycle exists in a Wait-for Graph, a deadlock exists when each resource type has only one instance.
+
+### 4. Deadlock Recovery
+
+After detecting a deadlock, take action to resolve it.
+
+Common approaches:
+
+- Abort one or more transactions.
+- Rollback a transaction.
+- Release locked resources.
+
+---
+
+## 5. Wait-for Graph
+
+A Wait-for Graph is used for deadlock detection.
+
+- Each node represents a transaction.
+- An edge `T1 → T2` means T1 is waiting for a resource held by T2.
+- A cycle indicates deadlock when each resource has a single instance.
+
+### Example
+
+```text
+T1 → T2
+↑     ↓
+└─────┘
+```
+
+Here:
+
+- T1 waits for T2.
+- T2 waits for T1.
+- A cycle exists.
+- Therefore, Deadlock occurs.
+
+---
+
+## 6. Deadlock vs Starvation
+
+| Deadlock | Starvation |
+|---|---|
+| Transactions wait for each other indefinitely. | A transaction waits indefinitely because resources keep being allocated to others. |
+| Circular waiting may occur. | Circular waiting is not necessary. |
+| No transaction in the deadlocked cycle can proceed. | Other transactions may continue executing. |
+| Resolved through deadlock recovery. | Resolved through fair scheduling or resource allocation. |
+
+---
+
+## 7. Important Algorithms
+
+| Algorithm | Purpose |
+|---|---|
+| Banker's Algorithm | Deadlock Avoidance |
+| Wait-for Graph | Deadlock Detection |
+| Resource Allocation Graph | Deadlock Analysis |
+
+---
+
 
