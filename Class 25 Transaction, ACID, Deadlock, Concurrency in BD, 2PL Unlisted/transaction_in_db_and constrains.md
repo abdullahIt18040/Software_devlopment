@@ -625,6 +625,8 @@ Two or more transactions wait for resources in a circular chain.
 There are four major techniques for handling deadlocks.
 
 ### 1. Deadlock Prevention
+
+```
 Deadlock হওয়ার আগেই চারটি condition-এর যেকোনো একটি ভেঙে দেওয়া হয়।
 Prevent deadlock before it happens by eliminating at least one of the four necessary conditions.
 
@@ -669,6 +671,39 @@ Case 2: T2 requests a resource held by T1
 - T1 is Older.
 - T2 will Die (Abort).
 Result: T2 → Abort
+Wound-Wait Scheme (Deadlock Prevention in DBMS)
+Wound-Wait Scheme হলো DBMS-এর একটি Deadlock Prevention Technique। এটি Timestamp-based protocol ব্যবহার করে deadlock প্রতিরোধ করে।
+
+এখানে দুটি Transaction-এর বয়স (Timestamp) তুলনা করে সিদ্ধান্ত নেওয়া হয় কোন Transaction অপেক্ষা করবে এবং কোন Transaction abort হবে।
+1. Basic Rules
+Wound-Wait Scheme-এ:
+- Older Transaction: যে Transaction আগে শুরু হয়েছে (ছোট Timestamp)।
+- Younger Transaction: যে Transaction পরে শুরু হয়েছে (বড় Timestamp)।
+দুটি নিয়ম:
+1. Older Transaction যদি Younger Transaction-এর Lock চায় → Younger Transaction-কে Abort (Wound) করা হবে।
+2. Younger Transaction যদি Older Transaction-এর Lock চায় → Younger Transaction অপেক্ষা করবে (Wait)।
+2. Example
+ধরি:
+- T1 Timestamp = 5 (Older)
+- T2 Timestamp = 10 (Younger)
+Case 1: Older requests Younger’s lock
+Wound – Abort
+T1 wants a lock held by T2.
+T1 (Older)
+
+T2 (Younger)
+
+T2 will be aborted, and T1 gets the lock.
+
+Case 2: Younger requests Older’s lock
+Wait
+T2 wants a lock held by T1.
+T2 (Younger)
+
+T1 (Older)
+
+T2 must wait until T1 releases the lock.
+```
 
 ### 2. Deadlock Avoidance
 Transaction execute করার আগে check করা হয় Deadlock হওয়ার সম্ভাবনা আছে কি না।
