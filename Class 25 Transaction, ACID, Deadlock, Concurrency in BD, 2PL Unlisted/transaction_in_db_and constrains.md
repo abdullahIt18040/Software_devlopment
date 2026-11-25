@@ -590,6 +590,8 @@ This situation is called **Deadlock**.
 ---
 
 ## 3. Four Necessary Conditions of Deadlock
+<img width="787" height="310" alt="image" src="https://github.com/user-attachments/assets/0d2815d5-7e4c-4fe4-8af2-c84c19c7ef47" />
+
 
 Deadlock occurs when all four conditions exist simultaneously.
 
@@ -623,18 +625,19 @@ Two or more transactions wait for resources in a circular chain.
 There are four major techniques for handling deadlocks.
 
 ### 1. Deadlock Prevention
-
+Deadlock হওয়ার আগেই চারটি condition-এর যেকোনো একটি ভেঙে দেওয়া হয়।
 Prevent deadlock before it happens by eliminating at least one of the four necessary conditions.
 
 Example: Prevent Hold and Wait by requiring a transaction to request all required resources before execution.
 
 ### 2. Deadlock Avoidance
-
+Transaction execute করার আগে check করা হয় Deadlock হওয়ার সম্ভাবনা আছে কি না।
 Before allocating resources, check whether the allocation keeps the system in a safe state.
 
 **Example:** Banker's Algorithm.
 
 ### 3. Deadlock Detection
+<img width="817" height="601" alt="image" src="https://github.com/user-attachments/assets/350c8487-d31b-4fca-9ad8-38b906a7a779" />
 
 Allow deadlocks to occur and periodically check whether a deadlock exists.
 
@@ -643,7 +646,7 @@ Allow deadlocks to occur and periodically check whether a deadlock exists.
 If a cycle exists in a Wait-for Graph, a deadlock exists when each resource type has only one instance.
 
 ### 4. Deadlock Recovery
-
+Deadlock detect হওয়ার পর কোনো একটি Transaction rollback বা terminate করে Lock release করা হয়।
 After detecting a deadlock, take action to resolve it.
 
 Common approaches:
