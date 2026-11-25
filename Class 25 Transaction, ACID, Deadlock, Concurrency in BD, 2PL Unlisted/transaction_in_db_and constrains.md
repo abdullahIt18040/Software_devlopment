@@ -590,6 +590,7 @@ This situation is called **Deadlock**.
 ---
 
 ## 3. Four Necessary Conditions of Deadlock
+
 <img width="787" height="310" alt="image" src="https://github.com/user-attachments/assets/0d2815d5-7e4c-4fe4-8af2-c84c19c7ef47" />
 
 
@@ -830,7 +831,9 @@ Expected Balance = 6,000 টাকা।
 Actual Balance = 7,000 টাকা।
 
 এখানে T1-এর Update হারিয়ে গেছে।
-2. Dirty Read Problem
+
+
+### 2. Dirty Read Problem
 একটি Transaction অন্য একটি Uncommitted Transaction-এর Updated Data Read করলে তাকে Dirty Read বলে।
 
 Example:
