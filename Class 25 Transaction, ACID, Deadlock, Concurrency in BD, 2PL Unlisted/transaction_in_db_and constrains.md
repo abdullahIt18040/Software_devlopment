@@ -904,6 +904,27 @@ It has two phases:
 <img width="667" height="612" alt="image" src="https://github.com/user-attachments/assets/fd2f9b93-54e9-4474-9543-c8c1cfe9dffe" />
 
 <img width="654" height="717" alt="image" src="https://github.com/user-attachments/assets/29ec2883-5284-416d-9823-f2965c8bd59d" />
+<img width="618" height="383" alt="image" src="https://github.com/user-attachments/assets/9a7dd2f0-1d48-4778-b231-58ff54cc11e5" />
+
+1.ANSWER
+A functional dependency is a relationship between two sets of attributes in a  table. If the value of one column uniquely determines the value of another column, it is called a Functional Dependency.
+<img width="387" height="101" alt="image" src="https://github.com/user-attachments/assets/aa906bdf-7db7-4562-9548-f2aa9058ee5d" />
+
+## 2 Answer Inconsistent State in DBMS:**
+
+An inconsistent state occurs when concurrent transactions execute without proper concurrency control and produce incorrect or inconsistent database values.
+
+In the given schedule, both T1 and T2 read the same initial value of A (1000).
+
+- T1 calculates A = A - 5 = 995.
+- T2 calculates temp = 1000 × 0.12 = 120 and A = 1000 - 120 = 880.
+- T2 writes A = 880.
+- After that, T1 writes A = 995, overwriting T2's update.
+- T2's deduction of 120 is lost, but 120 is added to B.
+
+This situation is called the **Lost Update Problem**.
+
+**Conclusion:** Due to concurrent execution without proper concurrency control, the database reaches an inconsistent state.
 
    ```
 
