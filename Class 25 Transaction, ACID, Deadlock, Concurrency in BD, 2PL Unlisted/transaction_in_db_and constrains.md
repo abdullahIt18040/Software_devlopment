@@ -818,21 +818,9 @@ Concurrency Control না থাকলে ভুলভাবে Data Update হ
 যখন দুটি Transaction একই Data Update করে এবং একটি Transaction-এর Update অন্যটি overwrite করে দেয়।
 
 <img width="974" height="383" alt="image" src="https://github.com/user-attachments/assets/39a730ef-89af-4914-b745-c34c2e797a8c" />
-
-Example:
-Step	Transaction T1	Transaction T2	Balance
-1	Read(5000)		5000
-2		Read(5000)	5000
-3	Withdraw 1000		4000
-4		Deposit 2000	7000
-5	Write(4000)		4000
-6		Write(7000)	7000
-
-Expected Balance = 6,000 টাকা।
-
-Actual Balance = 7,000 টাকা।
-
-এখানে T1-এর Update হারিয়ে গেছে।
+<img width="400" height="369" alt="image" src="https://github.com/user-attachments/assets/7d5cc328-1f72-400c-87b2-0f79367da8bd" />
+T1 update 50 and T2 update value 30
+finally T1 update value lost.
 
 
 ### 2. Dirty Read Problem
