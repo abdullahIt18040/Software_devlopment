@@ -817,6 +817,8 @@ Concurrency Control না থাকলে ভুলভাবে Data Update হ
 ### 1. Lost Update Problem
 যখন দুটি Transaction একই Data Update করে এবং একটি Transaction-এর Update অন্যটি overwrite করে দেয়।
 
+<img width="974" height="383" alt="image" src="https://github.com/user-attachments/assets/39a730ef-89af-4914-b745-c34c2e797a8c" />
+
 Example:
 Step	Transaction T1	Transaction T2	Balance
 1	Read(5000)		5000
@@ -840,7 +842,10 @@ Actual Balance = 7,000 টাকা।
 
 ### 3. Non-Repeatable Read
 একই Transaction-এ একই Data দুইবার Read করলে ভিন্ন Value পাওয়া গেলে তাকে Non-Repeatable Read বলে।
-4. Phantom Read
+<img width="912" height="355" alt="image" src="https://github.com/user-attachments/assets/7b46017e-2f6f-401a-8f0b-26e8699bcafa" />
+
+
+## 4. Phantom Read
 একই Query এক Transaction-এর মধ্যে একাধিকবার Execute করলে নতুন কিছু Row দেখা গেলে তাকে Phantom Read বলে।
 
 3. Techniques of Concurrency Control
