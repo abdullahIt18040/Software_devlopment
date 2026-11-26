@@ -834,16 +834,19 @@ finally T1 update value lost.
 
 
 ## 4. Phantom Read
-একই Query এক Transaction-এর মধ্যে একাধিকবার Execute করলে নতুন কিছু Row দেখা গেলে তাকে Phantom Read বলে।
+
+<img width="831" height="397" alt="image" src="https://github.com/user-attachments/assets/f0afe1be-2219-4675-85d7-c78e0bb58018" />
+<img width="948" height="391" alt="image" src="https://github.com/user-attachments/assets/78b9d126-dfd4-4a5e-b0c8-ed5313273a19" />
+
 
 3. Techniques of Concurrency Control
 Concurrency Control-এর প্রধান Techniques:
 Concurrency Control
-1. Lock-Based Protocol
+1. Lock-Based Protocol(importent for exam)
 
 Shared Lock, Exclusive Lock, Two-Phase Locking (2PL)
 
-2. Timestamp-Based Protocol
+2. Timestamp-Based Protocol( never come in job exam so no need to read for exam)
 
 Timestamp Ordering
 
@@ -855,6 +858,9 @@ Optimistic Concurrency Control
 
 Maintains multiple versions of data
 
+<img width="730" height="440" alt="image" src="https://github.com/user-attachments/assets/87b62890-c444-48c4-9276-2e8004c31c9f" />
+
+
 
 1. Lock-Based Protocol
 Lock ব্যবহার করে Database Data Access নিয়ন্ত্রণ করা হয়।
@@ -865,8 +871,20 @@ Shared Lock (S)	Read operation
 Exclusive Lock (X)	Write operation
 
 Shared Lock: Multiple transactions can read the same data simultaneously.
+<img width="894" height="336" alt="image" src="https://github.com/user-attachments/assets/fbbe645e-8c33-44d9-aa17-77dd14a4f4e3" />
 
-Exclusive Lock: Only one transaction can hold the exclusive lock on a data item.
+Exclusive Lock: Only  the lock holder transaction can read and write data other  transaction can not read or write  data item while the Exclusive Lock is held.
+
+<img width="1003" height="455" alt="image" src="https://github.com/user-attachments/assets/a24bc2fa-ae03-4625-8e6a-4b753b978909" />
+
+
+### Lock Compatibility
+- S + S = Compatible
+- S + X = Incompatible
+- X + S = Incompatible
+- X + X = Incompatible
+
+
 2. Two-Phase Locking (2PL)
 Two-Phase Locking ensures conflict serializability.
 
