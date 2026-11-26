@@ -877,6 +877,7 @@ Exclusive Lock: Only  the lock holder transaction can read and write data other 
 
 <img width="1003" height="455" alt="image" src="https://github.com/user-attachments/assets/a24bc2fa-ae03-4625-8e6a-4b753b978909" />
 
+<img width="529" height="326" alt="image" src="https://github.com/user-attachments/assets/7ada9b86-94d5-4dc7-8911-1686ca73d760" />
 
 ### Lock Compatibility
 - S + S = Compatible
