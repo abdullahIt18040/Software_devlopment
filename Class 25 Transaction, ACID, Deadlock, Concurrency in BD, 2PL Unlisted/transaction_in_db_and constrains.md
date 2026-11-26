@@ -886,15 +886,20 @@ Exclusive Lock: Only  the lock holder transaction can read and write data other 
 - X + X = Incompatible
 
 
-2. Two-Phase Locking (2PL)
+## 2. Two-Phase Locking (2PL)
+   
 Two-Phase Locking ensures conflict serializability.
+<img width="687" height="633" alt="image" src="https://github.com/user-attachments/assets/9d777acd-db08-44c3-b1eb-3fd51e1b22f9" />
 
 It has two phases:
 1. Growing Phase: Transaction can acquire locks but cannot release locks.
 2. Shrinking Phase: Transaction can release locks but cannot acquire new locks.
+<img width="632" height="331" alt="image" src="https://github.com/user-attachments/assets/4bf349f9-a67e-4256-bb53-1c42997c01b1" />
 
    <img width="741" height="441" alt="image" src="https://github.com/user-attachments/assets/63124566-286b-4e4b-b4f3-88f24531293f" />
-   
+   <img width="893" height="435" alt="image" src="https://github.com/user-attachments/assets/33487c31-b722-4571-a9a3-40340157b3f3" />
+ <img width="728" height="217" alt="image" src="https://github.com/user-attachments/assets/f1863bcb-50e2-4c63-8058-6be8bd7d385b" />
+
    ```
 
 ```
