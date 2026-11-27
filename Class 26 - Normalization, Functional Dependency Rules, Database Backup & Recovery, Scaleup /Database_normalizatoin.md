@@ -20,9 +20,7 @@ If we know the value of one column, we can uniquely identify the value of anothe
 
 Functional Dependency is represented as:
 
-\[
-X \rightarrow Y
-\]
+<img width="389" height="209" alt="image" src="https://github.com/user-attachments/assets/7f3ecc11-9e0e-48cd-8557-1323a1dadb72" />
 
 Where:
 
