@@ -69,12 +69,8 @@ Therefore, Student_ID functionally determines Student_Name and Department.
 A Functional Dependency is trivial if the right-hand side (RHS) attributes are a subset of the left-hand side (LHS) attributes.
 
 **Example:**
+<img width="504" height="123" alt="image" src="https://github.com/user-attachments/assets/8c6bf00e-40f6-4112-8e1b-1406c4eb9b2d" />
 
-\[
-(Student\_ID, Student\_Name) \rightarrow Student\_Name
-\]
-
-Here, Student_Name is already part of the left-hand side.
 
 ### 2. Non-Trivial Functional Dependency
 
@@ -82,9 +78,8 @@ A Functional Dependency is non-trivial if the right-hand side attribute is not a
 
 **Example:**
 
-\[
-Student\_ID \rightarrow Student\_Name
-\]
+<img width="485" height="125" alt="image" src="https://github.com/user-attachments/assets/875c6bff-840c-434e-b04a-19fd23dd31af" />
+
 
 Here, Student_Name is not part of the left-hand side.
 
@@ -102,17 +97,7 @@ Consider the following Student_Course table:
 | 101 | C02 | 90 |
 | 102 | C01 | 78 |
 
-The Composite Primary Key is:
-
-\[
-(Student\_ID, Course\_ID)
-\]
-
-Functional Dependency:
-
-\[
-(Student\_ID, Course\_ID) \rightarrow Marks
-\]
+<img width="648" height="274" alt="image" src="https://github.com/user-attachments/assets/1eb0cca8-f12b-4548-a770-41819bc255ce" />
 
 **Explanation:**
 
@@ -128,15 +113,8 @@ A Partial Functional Dependency occurs when a non-key attribute depends on only 
 
 **Example:**
 
-\[
-(Student\_ID, Course\_ID) \rightarrow Student\_Name
-\]
+<img width="514" height="210" alt="image" src="https://github.com/user-attachments/assets/82205a19-f670-441d-ac93-f822de8bda06" />
 
-But actually:
-
-\[
-Student\_ID \rightarrow Student\_Name
-\]
 
 **Explanation:**
 
@@ -158,20 +136,8 @@ Consider the following Student table:
 | 102 | D02 | Information Technology |
 
 **Dependencies:**
+<img width="461" height="387" alt="image" src="https://github.com/user-attachments/assets/22849696-099f-4ed4-a55f-02ebe4997c04" />
 
-\[
-Student\_ID \rightarrow Department\_ID
-\]
-
-\[
-Department\_ID \rightarrow Department\_Name
-\]
-
-Therefore:
-
-\[
-Student\_ID \rightarrow Department\_Name
-\]
 
 **Explanation:**
 
